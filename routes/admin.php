@@ -244,6 +244,8 @@ Route::middleware(['auth'])->group(function () {
 
     ## Assign Courier Services
     Route::get('admin/assign/courier/services/page', [AssignCourierController::class, 'index'])->name('admin.assign.courier.services.page');
+    Route::post('admin/assign/courier/services', [AssignCourierController::class, 'order'])->name('admin.assign.courier.services');
+    
 });
 ### Protected Route Admin Profile & Password Pages End
 

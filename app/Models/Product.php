@@ -21,6 +21,6 @@ class Product extends Model
 
     public function bookingProducts()
     {
-        return $this->hasMany(BookingProduct::class, 'product_id');
+        return $this->hasMany(BookingProduct::class);
     }
 }

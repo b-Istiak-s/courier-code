@@ -20,9 +20,9 @@ class Booking extends Model
         'recipient_phone',
         'recipient_secondary_phone',
         'recipient_address',
-        'division_id',
-        'district_id',
-        'thana_id',
+        'city_id',
+        'zone_id',
+        'area_id',
         'status',
     ];
 
@@ -47,22 +47,16 @@ class Booking extends Model
     // Products associated with this booking
     public function products()
     {
-        return $this->hasMany(BookingProduct::class, 'order_id');
+        return $this->hasMany(BookingProduct::class);
     }
 
-    // Location relationships (if needed)
-    public function division()
+    public function productType()
     {
-        return $this->belongsTo(Division::class);
+        return $this->belongsTo(ProductType::class);
     }
 
-    public function district()
+    public function deliveryType()
     {
-        return $this->belongsTo(District::class);
-    }
-
-    public function thana()
-    {
-        return $this->belongsTo(Thana::class);
+        return $this->belongsTo(DeliveryType::class);
     }
 }

@@ -18,13 +18,15 @@ return new class extends Migration
             $table->string('order_id')->unique();
 
             // Connect to users table
-            $table->foreignId('merchant_id')->constrained('users')->onDelete('cascade'); // merchant
-            $table->foreignId('booking_operator_id')->nullable()->constrained('users')->onDelete('set null'); // operator
+            $table->foreignId('merchant_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('booking_operator_id')->nullable()->constrained('users')->nullOnDelete();
+
             // Connect to stores table
             $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
 
-            $table->string('product_type');
-            $table->string('delivery_type');
+            // 🌱 New Relationships
+            $table->foreignId('product_type_id')->constrained('product_types')->onDelete('cascade');
+            $table->foreignId('delivery_type_id')->constrained('delivery_types')->onDelete('cascade');
 
             // 👤 Recipient Details
             $table->string('recipient_name');
@@ -33,9 +35,9 @@ return new class extends Migration
             $table->text('recipient_address');
 
             // 🌍 Location Info
-            $table->unsignedBigInteger('division_id');
-            $table->unsignedBigInteger('district_id');
-            $table->unsignedBigInteger('thana_id');
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('zone_id');
+            $table->unsignedBigInteger('area_id');
 
             $table->string('status')->default('0');
 

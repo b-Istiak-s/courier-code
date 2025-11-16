@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingProduct;
+use App\Models\DeliveryType;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\Store;
+use Enan\PathaoCourier\Facades\PathaoCourier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,8 +20,11 @@ class BookingController extends Controller
         $store = Store::where('merchant_id', '=', Auth::user()->id)->where('status', '=', 1)->first();
         $products = Product::where('user_id', '=', Auth::user()->id)->get();
 
+        $get_cities = PathaoCourier::GET_CITIES();
+        $cities = $get_cities['data']['data'] ?? [];
+
         $bookingOrders = Booking::where('merchant_id', '=', Auth::user()->id)->paginate(8);
-        return view('admin.booking.index', compact('store', 'products', 'bookingOrders'));
+        return view('admin.booking.index', compact('store', 'products', 'bookingOrders', 'cities'));
     }
 
     /**
@@ -32,22 +38,24 @@ class BookingController extends Controller
             $user_id = Auth::user()->user_id;
         }
 
-
         // ✅ Load data for dropdowns
-        $stores = Store::select('id', 'name')->where('merchant_id', '=', $user_id)->orderBy('name')->get();
+        $stores   = Store::select('id', 'name')->where('merchant_id', '=', $user_id)->orderBy('name')->get();
         $products = Product::select('id', 'name')->where('user_id', '=', $user_id)->orderBy('name')->get();
-        // $divisions = Division::select('id', 'name')->orderBy('name')->get();
-        // $districts = District::select('id', 'name')->orderBy('name')->get();
-        // $thanas = Thana::select('id', 'name')->orderBy('name')->get();
 
-        // dd($stores);
+
+        $productTypes = ProductType::where('status', '=', 1)->orderBy('name')->get();
+        $deliveryTypes = DeliveryType::where('status', '=', 1)->orderBy('name')->get();
+
+        $get_cities = PathaoCourier::GET_CITIES();
+        $cities = $get_cities['data']['data'] ?? [];
+
         // ✅ Pass the data to the view
         return view('admin.booking.create', compact(
             'stores',
             'products',
-            // 'divisions',
-            // 'districts',
-            // 'thanas'
+            'cities',
+            'productTypes',
+            'deliveryTypes'
         ));
     }
 
@@ -58,15 +66,15 @@ class BookingController extends Controller
         // ✅ Step 1: Validate the incoming request
         $validatedData = $request->validate([
             'store_id'                  => 'required|integer',
-            'product_type'              => 'required|string',
-            'delivery_type'             => 'required|string',
+            'product_type_id'           => 'required|string',
+            'delivery_type_id'          => 'required|string',
             'recipient_name'            => 'required|string|max:100',
             'recipient_phone'           => 'required|string|max:20',
             'recipient_secondary_phone' => 'nullable|string|max:20',
             'recipient_address'         => 'required|string|max:255',
-            'division_id'               => 'required|integer',
-            'district_id'               => 'required|integer',
-            'thana_id'                  => 'required|integer',
+            'city_id'                   => 'required|integer',
+            'zone_id'                   => 'required|integer',
+            'area_id'                   => 'required|integer',
         ]);
 
         // Current date and time: YYYYMMDDHHIISS
@@ -80,15 +88,15 @@ class BookingController extends Controller
         $booking->booking_operator_id       = (Auth::user()->role == "booking-operator") ? Auth::user()->user_id : Auth::user()->id;
         $booking->order_id                  = $datetime . $random; // Combine
         $booking->store_id                  = $validatedData['store_id'];
-        $booking->product_type              = $validatedData['product_type'];
-        $booking->delivery_type             = $validatedData['delivery_type'];
+        $booking->product_type_id           = $validatedData['product_type_id'];
+        $booking->delivery_type_id          = $validatedData['delivery_type_id'];
         $booking->recipient_name            = $validatedData['recipient_name'];
         $booking->recipient_phone           = $validatedData['recipient_phone'];
         $booking->recipient_secondary_phone = $validatedData['recipient_secondary_phone'] ?? null;
         $booking->recipient_address         = $validatedData['recipient_address'];
-        $booking->division_id               = $validatedData['division_id'];
-        $booking->district_id               = $validatedData['district_id'];
-        $booking->thana_id                  = $validatedData['thana_id'];
+        $booking->city_id                   = $validatedData['city_id'];
+        $booking->zone_id                   = $validatedData['zone_id'];
+        $booking->area_id                   = $validatedData['area_id'];
         $booking->save();
 
         // ✅ Step 3: Redirect with a success message
@@ -101,15 +109,15 @@ class BookingController extends Controller
         // $store = Store::where('merchant_id', '=', Auth::user()->id)->where('status', '=', 1)->first();
         $products       = Product::where('user_id', '=', Auth::user()->id)->get();
         $bookingOrders  = Booking::where('id', '=', $orderId)->paginate(8);
-        $bookinProducts = BookingProduct::where('order_id', '=', $orderId)->get();
+        $bookinProducts = BookingProduct::where('booking_id', '=', $orderId)->get();
 
-        return view('admin.booking.add_product', compact('orderId', 'products', 'bookingOrders','bookinProducts'));
+        return view('admin.booking.add_product', compact('orderId', 'products', 'bookingOrders', 'bookinProducts'));
     }
 
     public function addProduct(Request $request)
     {
         $validated = $request->validate([
-            'order_id'          => 'required|exists:bookings,id',
+            'booking_id'        => 'required|exists:bookings,id',
             'product_id'        => 'required|exists:products,id',
             'weight'            => 'nullable|numeric|min:0',
             'quantity'          => 'required|integer|min:1',
@@ -117,12 +125,12 @@ class BookingController extends Controller
             'description_price' => 'nullable|string|max:255',
         ]);
 
-        $bookingProduct = \App\Models\BookingProduct::create($validated);
+        $bookingProduct = BookingProduct::create($validated);
 
         return response()->json([
             'success' => true,
             'message' => 'Product added successfully!',
-            'data' => $bookingProduct
+            'data'    => $bookingProduct
         ]);
     }
 

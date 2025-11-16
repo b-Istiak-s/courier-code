@@ -15,17 +15,13 @@ return new class extends Migration
             $table->id();
 
             // Foreign key to bookings table
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')
-                ->references('id')
-                ->on('bookings')
+            $table->foreignId('booking_id')
+                ->constrained('bookings')
                 ->onDelete('cascade');
 
             // Foreign key to products table
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
+            $table->foreignId('product_id')
+                ->constrained('products')
                 ->onDelete('cascade');
 
             // Additional columns

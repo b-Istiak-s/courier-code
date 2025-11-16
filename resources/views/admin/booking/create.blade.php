@@ -62,25 +62,23 @@
                                 </div>
 
                                 <div class="col-sm-12">
-                                    <label for="product_type" class="col-sm-3 col-form-label">Product Type</label>
-                                    <select class="form-select form-select-md" name="product_type"
+                                    <label for="product_type_id" class="col-sm-3 col-form-label">Product Type</label>
+                                    <select class="form-select form-select-md" id="product_type_id" name="product_type_id"
                                         aria-label="Small select example" required>
                                         <option value="">Product Type</option>
-                                        <option value="1">Parcel</option>
-                                        {{-- @foreach ($hubLists as $hubList)
-                                    <option value="{{ $hubList->id }}">{{ $hubList->name }}</option>
-                                    @endforeach --}}
+                                        @foreach ($productTypes as $productType)
+                                            <option value="{{ $productType->id }}">{{ $productType->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-12">
-                                    <label for="delivery_type" class="col-sm-3 col-form-label">Delivery Type</label>
-                                    <select class="form-select form-select-md" name="delivery_type"
+                                    <label for="delivery_type_id" class="col-sm-3 col-form-label">Delivery Type</label>
+                                    <select class="form-select form-select-md" id="delivery_type_id" name="delivery_type_id"
                                         aria-label="Small select example" required>
                                         <option value="">Delivery Type</option>
-                                        <option value="1">Normal Delivery</option>
-                                        {{-- @foreach ($hubLists as $hubList)
-                                    <option value="{{ $hubList->id }}">{{ $hubList->name }}</option>
-                                    @endforeach --}}
+                                        @foreach ($deliveryTypes as $deliveryType)
+                                            <option value="{{ $deliveryType->id }}">{{ $deliveryType->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -124,40 +122,47 @@
                                     <textarea id="recipient_address" name="recipient_address" rows="3" class="form-control"
                                         placeholder="Recipient Address">{{ old('recipient_address') }}</textarea>
                                 </div>
+                            </div>
 
-                                {{-- Division --}}
+                            {{-- Location selectors: City / Zone / Area (City -> Zone -> Area) --}}
+                            <div class="mb-3 row">
                                 <div class="col-sm-4">
-                                    <label for="division_id" class="col-form-label">Division</label>
-                                    <select class="form-select form-select-md" id="division_id" name="division_id"
-                                        aria-label="Small select example" required>
-                                        <option value="" selected>Select Division</option>
-                                        <option value="1">Chattogram</option>
-                                        <option value="2">Dhaka</option>
+                                    <label for="city_id" class="col-form-label">City</label>
+                                    <select id="city_id" name="city_id"
+                                        class="form-select @error('city_id') is-invalid @enderror">
+                                        <option value="">Select City</option>
+                                        @foreach ($cities ?? [] as $c)
+                                            <option value="{{ $c['city_id'] ?? $c->city_id }}"
+                                                {{ old('city_id') == ($c['city_id'] ?? $c->city_id) ? 'selected' : '' }}>
+                                                {{ $c['name'] ?? ($c['city_name'] ?? ($c->title ?? '')) }}</option>
+                                        @endforeach
                                     </select>
+                                    @error('city_id')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                {{-- District --}}
                                 <div class="col-sm-4">
-                                    <label for="district_id" class="col-form-label">District</label>
-                                    <select class="form-select form-select-md" id="district_id" name="district_id"
-                                        aria-label="Small select example" required>
-                                        <option value="" selected>Select District</option>
-                                        <option value="3">Chattogram</option>
-                                        <option value="4">Dhaka</option>
+                                    <label for="zone_id" class="col-form-label">Zone</label>
+                                    <select id="zone_id" name="zone_id"
+                                        class="form-select @error('zone_id') is-invalid @enderror" disabled>
+                                        <option value="">Select Zone</option>
                                     </select>
+                                    @error('zone_id')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                {{-- Thana --}}
                                 <div class="col-sm-4">
-                                    <label for="thana_id" class="col-form-label">Thana</label>
-                                    <select class="form-select form-select-md" id="thana_id" name="thana_id"
-                                        aria-label="Small select example" required>
-                                        <option value="" selected>Select Thana</option>
-                                        <option value="5">Chattogram</option>
-                                        <option value="6">Dhaka</option>
+                                    <label for="area_id" class="col-form-label">Area</label>
+                                    <select id="area_id" name="area_id"
+                                        class="form-select @error('area_id') is-invalid @enderror" disabled>
+                                        <option value="">Select Area</option>
                                     </select>
+                                    @error('area_id')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
-
                             </div>
 
                             {{-- Submit --}}
@@ -175,4 +180,117 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired - initializing location selects');
+
+            const citySelect = document.getElementById('city_id');
+            const zoneSelect = document.getElementById('zone_id');
+            const areaSelect = document.getElementById('area_id');
+
+            console.log('Elements found:', {
+                citySelect: !!citySelect,
+                zoneSelect: !!zoneSelect,
+                areaSelect: !!areaSelect
+            });
+
+            if (!citySelect || !zoneSelect || !areaSelect) return;
+
+            const routes = {
+                zones: (cityId) => `{{ url('/pathao/zones') }}/${cityId}`,
+                areas: (zoneId) => `{{ url('/pathao/areas') }}/${zoneId}`,
+            };
+
+            const oldCity = {!! json_encode(old('city_id')) !!};
+            const oldZone = {!! json_encode(old('zone_id')) !!};
+            const oldArea = {!! json_encode(old('area_id')) !!};
+
+            function setOptions(selectEl, items, placeholder) {
+                selectEl.innerHTML = '';
+                const opt0 = document.createElement('option');
+                opt0.value = '';
+                opt0.textContent = placeholder;
+                selectEl.appendChild(opt0);
+
+                items.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.city_id ?? item.zone_id ?? item.area_id ?? item.id ?? item._id;
+                    opt.textContent = item.city_name ?? item.zone_name ?? item.area_name ?? item.name ??
+                        item.title ?? item.label;
+                    selectEl.appendChild(opt);
+                });
+            }
+
+            function fetchJson(url) {
+                const headers = {
+                    'X-Requested-With': 'XMLHttpRequest'
+                };
+                const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+                if (tokenMeta) headers['X-CSRF-TOKEN'] = tokenMeta.content;
+
+                return fetch(url, {
+                    headers
+                }).then(r => {
+                    if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
+                    return r.json();
+                });
+            }
+
+            citySelect.addEventListener('change', function() {
+                const cityId = this.value;
+                console.debug('City changed to:', cityId);
+
+                zoneSelect.innerHTML = '<option value="">Select Zone</option>';
+                areaSelect.innerHTML = '<option value="">Select Area</option>';
+                zoneSelect.disabled = true;
+                areaSelect.disabled = true;
+
+                if (!cityId) return;
+
+                fetchJson(routes.zones(cityId))
+                    .then(data => {
+                        const zones = data.zones ?? data.data ?? [];
+                        setOptions(zoneSelect, zones, 'Select Zone');
+                        zoneSelect.disabled = false;
+
+                        if (oldZone) {
+                            zoneSelect.value = oldZone;
+                            zoneSelect.dispatchEvent(new Event('change'));
+                        }
+                    })
+                    .catch(err => console.error('Failed to load zones for city', cityId, err));
+            });
+
+            zoneSelect.addEventListener('change', function() {
+                const zoneId = this.value;
+                console.debug('Zone changed to:', zoneId);
+
+                areaSelect.innerHTML = '<option value="">Select Area</option>';
+                areaSelect.disabled = true;
+
+                if (!zoneId) return;
+
+                fetchJson(routes.areas(zoneId))
+                    .then(data => {
+                        const areas = data.areas ?? data.data ?? [];
+                        setOptions(areaSelect, areas, 'Select Area');
+                        areaSelect.disabled = false;
+
+                        if (oldArea) {
+                            areaSelect.value = oldArea;
+                        }
+                    })
+                    .catch(err => console.error('Failed to load areas for zone', zoneId, err));
+            });
+
+            // If old city exists, trigger loading
+            if (oldCity) {
+                citySelect.value = oldCity;
+                citySelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
 @endsection

@@ -50,7 +50,7 @@
                         <form id="bookingProductForm">
                             @csrf
 
-                            <input type="hidden" name="order_id" value="{{ $orderId }}"> <!-- If needed -->
+                            <input type="hidden" name="booking_id" value="{{ $orderId }}"> <!-- If needed -->
 
                             <div class="mb-3 row">
 

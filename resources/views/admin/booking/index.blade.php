@@ -115,11 +115,13 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Product Type</th>
-                                                                        <td>{{ $bookingOrder->product_type }}</td>
+                                                                        <td>{{ $bookingOrder->productType->name ?? 'N/A' }}
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Delivery Type</th>
-                                                                        <td>{{ $bookingOrder->delivery_type }}</td>
+                                                                        <td>{{ $bookingOrder->deliveryType->name ?? 'N/A' }}
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Recipient Name</th>
@@ -139,16 +141,22 @@
                                                                         <td>{{ $bookingOrder->recipient_address }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th>Division ID</th>
-                                                                        <td>{{ $bookingOrder->division_id }}</td>
+                                                                        <th>City</th>
+                                                                        <td>
+                                                                            @foreach ($cities ?? [] as $city)
+                                                                                @if ($city['city_id'] == $bookingOrder->city_id)
+                                                                                    {{ $city['city_name'] }}
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th>District ID</th>
-                                                                        <td>{{ $bookingOrder->district_id }}</td>
+                                                                        <th>Zone</th>
+                                                                        <td>{{ $bookingOrder->zone_id }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th>Thana ID</th>
-                                                                        <td>{{ $bookingOrder->thana_id }}</td>
+                                                                        <th>Area</th>
+                                                                        <td>{{ $bookingOrder->area_id }}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Created At</th>
@@ -170,7 +178,9 @@
 
                                     </td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" href="{{route('admin.booking.product.page', $bookingOrder->id)}}">Add Product</a>
+                                        <a class="btn btn-sm btn-success"
+                                            href="{{ route('admin.booking.product.page', $bookingOrder->id) }}">Add
+                                            Product</a>
                                     </td>
                                     <td>
                                         @if ($bookingOrder->status == 1)

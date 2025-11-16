@@ -9,9 +9,9 @@ class BookingProduct extends Model
 {
     //
     use HasFactory;
-    
+
     protected $fillable = [
-        'order_id',
+        'booking_id',
         'product_id',
         'weight',
         'quantity',
@@ -19,14 +19,13 @@ class BookingProduct extends Model
         'description_price',
     ];
 
-
     public function booking()
     {
-        return $this->belongsTo(Booking::class, 'order_id');
+        return $this->belongsTo(Booking::class);
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
 }
