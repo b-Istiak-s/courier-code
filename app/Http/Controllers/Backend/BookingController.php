@@ -23,7 +23,7 @@ class BookingController extends Controller
         $get_cities = PathaoCourier::GET_CITIES();
         $cities = $get_cities['data']['data'] ?? [];
 
-        $bookingOrders = Booking::where('merchant_id', '=', Auth::user()->id)->paginate(8);
+        $bookingOrders = Booking::where('merchant_id', '=', Auth::user()->id)->orderBy('id', 'desc')->paginate(8);
         return view('admin.booking.index', compact('store', 'products', 'bookingOrders', 'cities'));
     }
 

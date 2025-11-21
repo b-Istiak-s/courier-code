@@ -22,6 +22,7 @@ class AssignCourierController extends Controller
             'products.product'   // nested eager loading
         ])
             ->where('merchant_id', Auth::id())
+            ->orderBy('id', 'desc')
             ->paginate(8);
 
         return view('admin.courier-services.index', compact('bookings'));
@@ -52,7 +53,8 @@ class AssignCourierController extends Controller
             }
 
             $bulkOrders[] = [
-                'store_id' => $booking->store->pathao_store_id, // Pathao store ID from database
+                // 'store_id' => $booking->store->pathao_store_id, // Pathao store ID from database
+                'store_id' => 345173, // Pathao store ID from database
                 'merchant_order_id' => $booking->order_id . '-' . ($index + 1), // Unique order ID per product
                 'sender_name' => $booking->merchant->name ?? 'Merchant', // Store/Sender name
                 'sender_phone' => $booking->merchant->phone ?? '01700000000', // Store/Sender phone
