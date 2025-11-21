@@ -65,7 +65,7 @@ class StoreController extends Controller
         $data = [
             'merchant_id' => $validated['merchant_id'],
             'name' => $validated['name'],
-            'owner_name' => $validated['owner_name'],
+            'owner_name' => $validated['owner_name'], // Store owner name in owner_phone field
             'primary_phone' => $validated['phone'],
             'email' => $validated['email'],
             'address' => $validated['address'],
@@ -101,9 +101,17 @@ class StoreController extends Controller
                     ->with('error', 'Failed to create store in Pathao: ' . ($pathaoResponse['message'] ?? 'Unknown error'));
             }
 
-            // Optionally store the Pathao store_id returned in response
-            if (isset($pathaoResponse['data']['store_id'])) {
-                $data['pathao_store_id'] = $pathaoResponse['data']['store_id'];
+            // Extract and store the Pathao store_id from response
+
+            // When a new store is created, Pathao keeps the status as Approval Pending, but when stores are retrieved
+            // from the API later, they appear there. So we fetch the store ID by listing stores; however, for that the store must be
+            // Activated, which is not the case immediately after creation.
+            // Therefore, this method shall be moved elsewhere after some time or upon status change.
+            // Given the API guide, Pathao doesn't provide any webhooks for store approval status changes.
+            $pathaoStoreId = $this->retrievePathaoStoreId($validated['name']);
+            if ($pathaoStoreId) {
+                $data['pathao_store_id'] = $pathaoStoreId;
+                Log::info('Pathao Store ID retrieved: ' . $pathaoStoreId);
             }
 
         } catch (\Exception $e) {
@@ -116,6 +124,45 @@ class StoreController extends Controller
         Store::create($data);
 
         return back()->with('success', 'Store added successfully and registered with Pathao!');
+    }
+
+    /**
+     * Retrieve Pathao store ID by store name
+     * @param string $storeName
+     * @return int|null
+     */
+    private function retrievePathaoStoreId(string $storeName)
+    {
+        try {
+            $page = 1;
+            $maxPages = 10; // Prevent infinite loop
+
+            while ($page <= $maxPages) {
+                $storesResponse = PathaoCourier::GET_STORES($page);
+
+                if (isset($storesResponse['data']) && is_array($storesResponse['data'])) {
+                    foreach ($storesResponse['data'] as $store) {
+                        // Match store by name (case-insensitive)
+                        if (isset($store['name']) && strcasecmp($store['name'], $storeName) === 0) {
+                            return $store['store_id'] ?? null;
+                        }
+                    }
+
+                    // If no more pages, break
+                    if (empty($storesResponse['data']) || count($storesResponse['data']) < 10) {
+                        break;
+                    }
+
+                    $page++;
+                } else {
+                    break;
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Error retrieving Pathao store ID: ' . $e->getMessage());
+        }
+
+        return null;
     }
 
     public function assignStoreAdmin(Request $request, $id)

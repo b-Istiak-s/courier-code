@@ -21,6 +21,7 @@ class Store extends Model
         'zone',
         'area',
         'status',
+        'pathao_store_id',
     ];
 
     public function users()
