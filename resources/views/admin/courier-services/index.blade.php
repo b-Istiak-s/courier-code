@@ -94,7 +94,7 @@
                                                                             <th>Order ID</th>
                                                                             <th>Product Name</th>
                                                                             <th>QTY</th>
-                                                                            <th>Price</th>
+                                                                            {{-- <th>Price</th> --}}
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -105,7 +105,7 @@
                                                                                 <td>{{ $booking->order_id }}</td>
                                                                                 <td>{{ $bp->product->name }}</td>
                                                                                 <td>{{ $bp->quantity }}</td>
-                                                                                <td>{{ $bp->amount }}</td>
+                                                                                {{-- <td>{{ $bp->amount }}</td> --}}
                                                                             </tr>
                                                                         @endforeach
 

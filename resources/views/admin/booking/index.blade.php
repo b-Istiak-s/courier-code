@@ -68,7 +68,7 @@
                                 <th>Recipient Name</th>
                                 <th>Recipient Phone</th>
                                 <th>Details</th>
-                                <th>Add Product</th>
+                                {{-- <th>Add Product</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -180,13 +180,13 @@
                                         </div>
 
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @if (empty($bookingOrder->courier_service))
                                             <a class="btn btn-sm btn-success"
                                                 href="{{ route('admin.booking.product.page', $bookingOrder->id) }}">Add
                                                 Product</a>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
