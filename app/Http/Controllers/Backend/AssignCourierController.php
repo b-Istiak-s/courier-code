@@ -7,6 +7,7 @@ use App\Models\Booking;
 use Enan\PathaoCourier\Facades\PathaoCourier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AssignCourierController extends Controller
@@ -22,8 +23,42 @@ class AssignCourierController extends Controller
             'products.product'   // nested eager loading
         ])
             ->where('merchant_id', Auth::id())
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('bookings.order_id', 'like', '%' . $request->search . '%');
+            })
             ->orderBy('id', 'desc')
-            ->paginate(8);
+            ->paginate(8)
+            ->withQueryString();
+
+
+
+        // $bookings = DB::table('bookings')
+        //     ->leftJoin('stores', 'bookings.store_id', '=', 'stores.id')
+        //     ->leftJoin('merchants', 'bookings.merchant_id', '=', 'merchants.id')
+        //     ->leftJoin('users as booking_operators', 'bookings.booking_operator_id', '=', 'booking_operators.id')
+        //     ->leftJoin('product_types', 'bookings.product_type_id', '=', 'product_types.id')
+        //     ->leftJoin('delivery_types', 'bookings.delivery_type_id', '=', 'delivery_types.id')
+        //     ->leftJoin('booking_products', 'booking_products.booking_id', '=', 'bookings.id')
+        //     ->leftJoin('products', 'booking_products.product_id', '=', 'products.id')
+        //     ->select(
+        //         'bookings.*',
+        //         'stores.name as store_name',
+        //         'merchants.name as merchant_name',
+        //         'booking_operators.name as booking_operator_name',
+        //         'product_types.name as product_type_name',
+        //         'delivery_types.name as delivery_type_name',
+        //         'booking_products.id as booking_product_id',
+        //         'booking_products.quantity as booking_product_quantity',
+        //         'products.name as product_name',
+        //         'products.weight as product_weight'
+        //     )
+        //     ->when($request->filled('search'), function ($query) use ($request) {
+        //         $query->where('bookings.order_id', 'like', '%' . $request->search . '%');
+        //     })
+        //     ->where('bookings.merchant_id', Auth::id())
+        //     ->orderByDesc('bookings.id')
+        //     ->paginate(8)
+        //     ->withQueryString();
 
         return view('admin.courier-services.index', compact('bookings'));
     }

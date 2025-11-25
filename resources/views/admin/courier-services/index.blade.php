@@ -30,10 +30,10 @@
                 </div>
                 <div class="card-body">
                     {{-- Search --}}
-                    <form method="GET" action="{{ route('admin.register.page') }}" class="mb-4">
+                    <form method="GET" action="{{ route('admin.assign.courier.services.page') }}" class="mb-4">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control"
-                                placeholder="Search by name, email or phone" value="{{ request('search') }}">
+                                placeholder="Search by Order ID" value="{{ request('search') }}">
                             <button class="btn btn-outline-secondary" type="submit">Search</button>
                         </div>
                     </form>

@@ -23,13 +23,18 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $store = Store::where('merchant_id', '=', Auth::user()->id)->where('status', '=', 1)->first();
-        $products = Product::where('user_id', '=', Auth::user()->id)->get();
-
+        $store      = Store::where('merchant_id', '=', Auth::user()->id)->where('status', '=', 1)->first();
+        $products   = Product::where('user_id', '=', Auth::user()->id)->get();
         $get_cities = PathaoCourier::GET_CITIES();
-        $cities = $get_cities['data']['data'] ?? [];
+        $cities     = $get_cities['data']['data'] ?? [];
 
-        $bookingOrders = Booking::where('merchant_id', '=', Auth::user()->id)->orderBy('id', 'desc')->paginate(8);
+        $bookingOrders = Booking::query()
+            ->when($request->filled('search'), fn($q) =>
+            $q->where('order_id', 'like', '%' . $request->search . '%'))
+            ->latest()
+            ->paginate(8)
+            ->withQueryString();
+
         return view('admin.booking.index', compact('store', 'products', 'bookingOrders', 'cities'));
     }
 
@@ -100,83 +105,83 @@ class BookingController extends Controller
         // -------------------------------------
         // Step 2: Use DB Transaction
         // -------------------------------------
-        // DB::beginTransaction();
+        DB::beginTransaction();
 
-        // try {
+        try {
 
-        // ------------------------------
-        // Save Booking
-        // ------------------------------
-        $booking = Booking::create([
-            'merchant_id'               => Auth::user()->user_id ?? Auth::user()->id,
-            'booking_operator_id'       => (Auth::user()->role == "booking-operator") ? Auth::user()->user_id : Auth::user()->id,
-            'order_id'                  => $datetime . strtoupper($random),
-            'store_id'                  => $validatedData['store_id'],
-            'product_type_id'           => $validatedData['product_type_id'],
-            'delivery_type_id'          => $validatedData['delivery_type_id'],
-            'recipient_name'            => $validatedData['recipient_name'],
-            'recipient_phone'           => $validatedData['recipient_phone'],
-            'recipient_secondary_phone' => $validatedData['recipient_secondary_phone'] ?? null,
-            'recipient_address'         => $validatedData['recipient_address'],
-            'city_id'                   => $validatedData['city_id'],
-            'zone_id'                   => $validatedData['zone_id'],
-            'area_id'                   => $validatedData['area_id'],
-            'amount_to_collect'         => $validatedData["amount_to_collect"],
-            'item_description'          => $validatedData["item_description"],
-            'area_id'                   => $validatedData['area_id'],
-            'area_id'                   => $validatedData['area_id'],
-        ]);
-
-        // Get ID
-        $booking_id = $booking->id;
-
-        // Step 1: Get all product IDs
-        $productIds = collect($products)->pluck('product_id')->toArray();
-
-        // Step 2: Get all product info (weight + stock) in ONE QUERY
-        $productData = Product::whereIn('id', $productIds)
-            ->get(['id', 'weight', 'stock'])
-            ->keyBy('id');
-
-        // Step 3: Prepare bulk insert array
-        $bookingProductInsert = [];
-
-        foreach ($products as $item) {
-            $pid = $item['product_id'];
-
-            // Get product object
-            $product = $productData[$pid];
-
-            // Reduce stock in memory
-            $product->stock -= $item['quantity'];
-
-            // Prepare booking product insert
-            $bookingProductInsert[] = [
-                'booking_id' => $booking_id,
-                'product_id' => $pid,
-                'quantity'   => $item['quantity'],
-                'weight'     => $product->weight,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
-
-        // Step 4: BULK update stock (only one query)
-        foreach ($productData as $product) {
-            Product::where('id', $product->id)->update([
-                'stock' => $product->stock
+            // ------------------------------
+            // Save Booking
+            // ------------------------------
+            $booking = Booking::create([
+                'merchant_id'               => Auth::user()->user_id ?? Auth::user()->id,
+                'booking_operator_id'       => (Auth::user()->role == "booking-operator") ? Auth::user()->user_id : Auth::user()->id,
+                'order_id'                  => $datetime . strtoupper($random),
+                'store_id'                  => $validatedData['store_id'],
+                'product_type_id'           => $validatedData['product_type_id'],
+                'delivery_type_id'          => $validatedData['delivery_type_id'],
+                'recipient_name'            => $validatedData['recipient_name'],
+                'recipient_phone'           => $validatedData['recipient_phone'],
+                'recipient_secondary_phone' => $validatedData['recipient_secondary_phone'] ?? null,
+                'recipient_address'         => $validatedData['recipient_address'],
+                'city_id'                   => $validatedData['city_id'],
+                'zone_id'                   => $validatedData['zone_id'],
+                'area_id'                   => $validatedData['area_id'],
+                'amount_to_collect'         => $validatedData["amount_to_collect"],
+                'item_description'          => $validatedData["item_description"],
+                'area_id'                   => $validatedData['area_id'],
+                'area_id'                   => $validatedData['area_id'],
             ]);
+
+            // Get ID
+            $booking_id = $booking->id;
+
+            // Step 1: Get all product IDs
+            $productIds = collect($products)->pluck('product_id')->toArray();
+
+            // Step 2: Get all product info (weight + stock) in ONE QUERY
+            $productData = Product::whereIn('id', $productIds)
+                ->get(['id', 'weight', 'stock'])
+                ->keyBy('id');
+
+            // Step 3: Prepare bulk insert array
+            $bookingProductInsert = [];
+
+            foreach ($products as $item) {
+                $pid = $item['product_id'];
+
+                // Get product object
+                $product = $productData[$pid];
+
+                // Reduce stock in memory
+                $product->stock -= $item['quantity'];
+
+                // Prepare booking product insert
+                $bookingProductInsert[] = [
+                    'booking_id' => $booking_id,
+                    'product_id' => $pid,
+                    'quantity'   => $item['quantity'],
+                    'weight'     => $product->weight,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            // Step 4: BULK update stock (only one query)
+            foreach ($productData as $product) {
+                Product::where('id', $product->id)->update([
+                    'stock' => $product->stock
+                ]);
+            }
+
+            // Step 5: BULK insert booking products (one query)
+            BookingProduct::insert($bookingProductInsert);
+
+            DB::commit();
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            return back()->with('error', 'Something went wrong! ');
         }
-
-        // Step 5: BULK insert booking products (one query)
-        BookingProduct::insert($bookingProductInsert);
-
-        DB::commit();
-        // } catch (\Exception $e) {
-
-        //     DB::rollBack();
-        //     return back()->with('error', 'Something went wrong! ');
-        // }
 
         // ------------------------------
         // Step 3: Return Success
