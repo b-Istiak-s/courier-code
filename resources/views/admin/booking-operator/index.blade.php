@@ -21,7 +21,7 @@
                 </div>
                 <div class="card-body table-responsive">
                     {{-- Search --}}
-                    <form method="GET" action="{{ route('admin.register.page') }}" class="mb-4">
+                    <form method="GET" action="{{ route('admin.booking.operator.page') }}" class="mb-4">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control"
                                 placeholder="Search by name, email or phone" value="{{ request('search') }}">

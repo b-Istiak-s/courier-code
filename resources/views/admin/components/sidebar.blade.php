@@ -34,6 +34,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.booking.page') }}">
+                    <div class="parent-icon"><i class='bx bx-cookie'></i></div>
+                    <div class="menu-title">Bulk Order</div>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.booking.operator.page') }}">
                     <div class="parent-icon"><i class='bx bx-cookie'></i></div>
                     <div class="menu-title">Booking Operator</div>
