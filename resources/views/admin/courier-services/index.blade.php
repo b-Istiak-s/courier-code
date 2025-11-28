@@ -156,21 +156,21 @@
                                         </td>
 
                                         <td>
+                                            {{ $booking->pathao_consignment_ids }}
                                             @php
-                                                $array = json_decode($booking->pathao_consignment_ids, true);
-                                            @endphp
-                                            @foreach ($array ?? [] as $item)
-                                                {{ $item }} -
-                                                @php
+                                                if (!empty($booking->pathao_consignment_ids)) {
+                                                    # code...
                                                     $value = Enan\PathaoCourier\Facades\PathaoCourier::VIEW_ORDER(
-                                                        $item,
+                                                        $booking->pathao_consignment_ids,
                                                     );
-                                                @endphp
+                                                }
+                                            @endphp
+                                            @if (!empty($booking->pathao_consignment_ids))
                                                 <div class="bg-danger p-2 rounded text-white" role="alert">
-                                                    {{ $value['data']['order_status'] }}
+                                                    {{ $value['data']['order_status'] ?? null }}
                                                 </div>
                                                 </br>
-                                            @endforeach
+                                            @endif
                                         </td>
 
                                     </tr>

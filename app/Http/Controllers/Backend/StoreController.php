@@ -15,15 +15,6 @@ class StoreController extends Controller
 {
     public function index(Request $request, $id)
     {
-        // $stores = Store::query()
-        //     ->when($request->filled('search'), fn($q) =>
-        //     $q->where('name', 'like', '%' . $request->search . '%'))
-        //     ->where('merchant_id', '=', $id)
-        //     ->latest()
-        //     ->paginate(10)
-        //     ->withQueryString();
-
-
         $stores = Store::query()
             ->when($request->filled('search'), function ($q) use ($request) {
                 $search = $request->search;
@@ -37,7 +28,6 @@ class StoreController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
-
 
         $storeAdmins = User::where('role', '=', 'store-admin')->where('status', '=', 1)->get(['id', 'name']);
         return view('admin.store.index', compact('stores', 'id', 'storeAdmins'));

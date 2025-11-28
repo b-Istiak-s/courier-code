@@ -30,13 +30,13 @@
                 </div>
                 <div class="card-body table-responsive">
                     {{-- Search --}}
-                    <form method="GET" action="{{ route('admin.register.page') }}" class="mb-4">
+                    {{-- <form method="GET" action="{{ route('admin.register.page') }}" class="mb-4">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control"
                                 placeholder="Search by name, email or phone" value="{{ request('search') }}">
                             <button class="btn btn-outline-secondary" type="submit">Search</button>
                         </div>
-                    </form>
+                    </form> --}}
                     <br>
 
                     {{-- Table --}}
@@ -49,7 +49,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($stores as $index => $store)
+                            @foreach ($stores ?? [] as $index => $store)
                                 <tr>
                                     <td>{{ $stores->firstItem() + $index }}</td>
                                     <td>{{ $store->name }}</td>
@@ -67,7 +67,9 @@
                     {{-- Pagination --}}
                     <div class="col-lg-12">
                         <div class="mt-3">
-                            {{ $stores->links('pagination::bootstrap-5') }}
+                            @if (!empty($stores))
+                                {{ $stores->links('pagination::bootstrap-5') }}
+                            @endif
                         </div>
                     </div>
                 </div>

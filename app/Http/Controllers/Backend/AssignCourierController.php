@@ -110,11 +110,14 @@ class AssignCourierController extends Controller
             }
 
             // Update booking record with Pathao consignment details
-            $booking->update([
-                'pathao_consignment_ids' => json_encode($consignmentIds), // Store as JSON array
-                'courier_status'         => 'pending',
-                'courier_service'        => 'pathao',
-            ]);
+            foreach ($consignmentIds as $key => $consignmentId) {
+                # code...
+                $booking->update([
+                    'pathao_consignment_ids' => $consignmentId, // Store as JSON array
+                    'courier_status'         => 'pending',
+                    'courier_service'        => 'pathao',
+                ]);
+            }
 
             $successMessage = count($consignmentIds) . ' order(s) created successfully! Consignments: ' . implode(', ', $consignmentIds);
 

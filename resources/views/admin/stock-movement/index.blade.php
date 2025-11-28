@@ -58,7 +58,7 @@
                 @csrf
 
                 <div class="mb-3 row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="product_id" class="col-form-label">Product</label>
                         <select class="form-select form-select-sm" id="product_id" name="product_id" required>
                             <option value="">Select Product</option>
@@ -71,7 +71,7 @@
                     </div>
 
                     {{-- Movement Type --}}
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="type" class="col-form-label">Movement Type</label>
                         <select class="form-select form-select-sm" id="type" name="type" required>
                             <option value="">Select Movement Type</option>
@@ -81,7 +81,7 @@
                     </div>
 
                     {{-- quantity --}}
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <label for="quantity" class="col-form-label">Quantity</label>
                         <input type="hidden" name="store_id" value="{{ $id }}">
                         <input type="text" id="quantity" name="quantity" class="form-control form-control-sm"
@@ -127,13 +127,13 @@
                 </div>
                 <div class="card-body table-responsive">
                     {{-- Search --}}
-                    <form method="GET" action="{{ route('admin.register.page') }}" class="mb-4">
+                    {{-- <form method="GET" action="{{ route('admin.stock.movement.page', $id) }}" class="mb-4">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control"
-                                placeholder="Search by name, email or phone" value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Search by product"
+                                value="{{ request('search') }}">
                             <button class="btn btn-outline-secondary" type="submit">Search</button>
                         </div>
-                    </form>
+                    </form> --}}
                     <br>
 
                     {{-- Table --}}
@@ -144,7 +144,7 @@
                                 <th>Product</th>
                                 <th>Movement Type</th>
                                 <th>Quantity</th>
-                                <th>Stock</th>
+                                {{-- <th>Stock</th> --}}
                                 <th>Notes</th>
                                 <th>Registered At</th>
                             </tr>
@@ -156,7 +156,7 @@
                                     <td>{{ $stockMovement->product->name }}</td>
                                     <td>{{ $stockMovement->type }}</td>
                                     <td>{{ $stockMovement->qty }}</td>
-                                    <td>{{ $stockMovement->product->stock }}</td>
+                                    {{-- <td>{{ $stockMovement->product->stock }}</td> --}}
                                     <td>{{ $stockMovement->notes }}</td>
                                     <td>{{ $stockMovement->created_at->format('d M, Y h:i A') }}</td>
                                     {{-- <td>

@@ -128,8 +128,6 @@ class BookingController extends Controller
                 'area_id'                   => $validatedData['area_id'],
                 'amount_to_collect'         => $validatedData["amount_to_collect"],
                 'item_description'          => $validatedData["item_description"],
-                'area_id'                   => $validatedData['area_id'],
-                'area_id'                   => $validatedData['area_id'],
             ]);
 
             // Get ID

@@ -15,21 +15,29 @@ class StockMovementController extends Controller
 
     public function index(Request $request, $id)
     {
-        // ✅ Find the store or show 404 if not found
+        ## ✅ Find the store or show 404 if not found
         $store = Store::findOrFail($id);
 
-        // ✅ Check if this store belongs to the logged-in user
-        if ((int) $store->store_admin_id !== Auth::id()) {
-            abort(404); // Unauthorized access → show 404
+        ## ✅ Check if this store belongs to the logged-in user
+        if ((int) $store->store_admin_id !== Auth::id() && (int) $store->merchant_id !== Auth::id()) {
+            abort(404); ## Unauthorized access → show 404
         }
 
-        // ✅ Get paginated stock movements (you can later filter by store_id if needed)
-        $stockMovements = StockMovement::paginate(8);
-        
-        // ✅ Get all products that belong to this user
-        $products = Product::where('user_id', Auth::user()->user_id)->get();
+        ## ✅ Get paginated stock movements (you can later filter by store_id if needed)
+        $stockMovements = StockMovement::where('store_id', '=', $id)->paginate(8);
+        $user           = Auth::user();
 
-        // ✅ Return the view with data
+        // Apply role-based store filtering
+        if ($user->role === 'admin' || $user->role === 'merchant') {
+            $user_id = $user->id;
+        } else {
+            $user_id = $user->user_id;
+        }
+
+        ## ✅ Get all products that belong to this user
+        $products = Product::where('user_id', $user_id ?? null)->get();
+
+        ## ✅ Return the view with data
         return view('admin.stock-movement.index', compact('stockMovements', 'products', 'id'));
     } ## End Mehtod
 
