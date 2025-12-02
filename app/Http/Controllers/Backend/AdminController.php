@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kyc;
-use App\Models\PaymentDetail;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -16,7 +14,7 @@ class AdminController extends Controller
     {
         $id = Auth::user()->id;
         $data = User::findorfail($id);
-        
+
         return view('admin.admin_profile_page', compact('data'));
     } ## End Mehtod
 

@@ -22,7 +22,7 @@ class StoreInchargeController extends Controller
                 });
             })
             ->where('user_id', '=', Auth::user()->id)
-            ->where('role', '=', 'store-inchage')
+            ->where('role', '=', 'store inchage')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -43,25 +43,28 @@ class StoreInchargeController extends Controller
     {
         // ✅ Step 1: Validate incoming request
         $validatedData = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'phone'    => 'nullable|string|max:20',
-            'address'  => 'nullable|string',
-            'hub_id'   => 'required|string',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'hub_id' => 'required|string',
         ]);
 
         // ✅ Step 3: Create the Hub Incharge
         $operator = new User();
-        $operator->user_id  = Auth::user()->id;
-        $operator->name     = $validatedData['name'];
-        $operator->email    = $validatedData['email'];
+        $operator->user_id = Auth::user()->id;
+        $operator->name = $validatedData['name'];
+        $operator->email = $validatedData['email'];
         $operator->password = bcrypt($validatedData['password']);
-        $operator->phone    = $validatedData['phone'] ?? null;
-        $operator->address  = $validatedData['address'] ?? null;
-        $operator->role     = 'store-inchage';
-        $operator->hub_id   = $validatedData['hub_id'];
+        $operator->phone = $validatedData['phone'] ?? null;
+        $operator->address = $validatedData['address'] ?? null;
+        $operator->role = 'store inchage';
+        $operator->hub_id = $validatedData['hub_id'];
         $operator->save();
+
+        // Add role to model_has_roles table automatically
+        $operator->assignRole('store inchage');
 
         // ✅ Step 4: Return response
         return redirect()->back()->with('success', 'Store Incharge created successfully!');
@@ -84,16 +87,16 @@ class StoreInchargeController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'phone'   => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'hub_id'  => 'required|string|max:255',
+            'hub_id' => 'required|string|max:255',
         ]);
 
-        $storeIncharge          = User::findOrFail($id);
-        $storeIncharge->name    = $validated['name'];
-        $storeIncharge->phone   = $validated['phone'];
-        $storeIncharge->hub_id  = $validated['hub_id'];
+        $storeIncharge = User::findOrFail($id);
+        $storeIncharge->name = $validated['name'];
+        $storeIncharge->phone = $validated['phone'];
+        $storeIncharge->hub_id = $validated['hub_id'];
         $storeIncharge->address = $validated['address'];
 
         $storeIncharge->save();

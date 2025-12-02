@@ -21,30 +21,70 @@
                     <div class="menu-title">Dashboard</div>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="{{ route('admin.assign.courier.services.page') }}">
                     <div class="parent-icon"><i class='bx bx-cookie'></i></div>
                     <div class="menu-title">Assign Courier Services</div>
                 </a>
-            </li>
-            <li>
+            </li> --}}
+            {{-- <li>
                 <a href="{{ route('admin.booking.page') }}">
                     <div class="parent-icon"><i class='bx bx-cookie'></i></div>
                     <div class="menu-title">Booking Order</div>
                 </a>
-            </li>
-            <li>
+            </li> --}}
+            {{-- <li>
                 <a href="{{ route('admin.bulk.upload.index') }}">
                     <div class="parent-icon"><i class='bx bx-cookie'></i></div>
                     <div class="menu-title">Bulk Order</div>
                 </a>
-            </li>
-            <li>
+            </li> --}}
+            {{-- <li>
                 <a href="{{ route('admin.booking.operator.page') }}">
                     <div class="parent-icon"><i class='bx bx-cookie'></i></div>
                     <div class="menu-title">Booking Operator</div>
                 </a>
+            </li> --}}
+
+
+
+
+            <li class="menu-label">BOOKING SETUP</li>
+            <li>
+                <a class="has-arrow" href="javascript:;">
+                    <div class="parent-icon">
+                        <i class="bx bx-grid-alt"></i>
+                    </div>
+                    <div class="menu-title">Manage Booking</div>
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{ route('admin.booking.operator.page') }}">
+                            <div class="parent-icon"><i class='bx bx-cookie'></i></div>
+                            <div class="menu-title">Booking Operator</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.bulk.upload.index') }}">
+                            <div class="parent-icon"><i class='bx bx-cookie'></i></div>
+                            <div class="menu-title">Bulk Order</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.booking.page') }}">
+                            <div class="parent-icon"><i class='bx bx-cookie'></i></div>
+                            <div class="menu-title">Booking Order</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.assign.courier.services.page') }}">
+                            <div class="parent-icon"><i class='bx bx-cookie'></i></div>
+                            <div class="menu-title">Assign Courier Services</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
 
             <li class="menu-label">STORE SETUP</li>
 
@@ -115,23 +155,24 @@
                 </ul>
             </li>
 
-            <li class="menu-label">SETUP</li>
-
-            <li>
-                <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon"><i class="bx bx-grid-alt"></i>
-                    </div>
-                    <div class="menu-title">Manage Product</div>
-                </a>
-                <ul>
-                    <li>
-                        <a href="{{ route('admin.product.index') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            Add Product
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @if(Auth::user()->can('product.menu'))
+                <li class="menu-label">SETUP</li>
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon"><i class="bx bx-grid-alt"></i>
+                        </div>
+                        <div class="menu-title">Manage Product</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('admin.product.index') }}">
+                                <i class="bx bx-right-arrow-alt"></i>
+                                Add Product
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
             <li class="menu-label">SETTING</li>
 

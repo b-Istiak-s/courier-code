@@ -45,7 +45,7 @@ class BookingController extends Controller
     {
         $user_id = Auth::user()->id;
 
-        if (Auth::user()->role == "booking-operator") {
+        if (Auth::user()->role == "booking operator") {
             $user_id = Auth::user()->user_id;
         }
 
@@ -114,7 +114,7 @@ class BookingController extends Controller
             // ------------------------------
             $booking = Booking::create([
                 'merchant_id'               => Auth::user()->user_id ?? Auth::user()->id,
-                'booking_operator_id'       => (Auth::user()->role == "booking-operator") ? Auth::user()->user_id : Auth::user()->id,
+                'booking_operator_id'       => (Auth::user()->role == "booking operator") ? Auth::user()->user_id : Auth::user()->id,
                 'order_id'                  => $datetime . strtoupper($random),
                 'store_id'                  => $validatedData['store_id'],
                 'product_type_id'           => $validatedData['product_type_id'],
@@ -240,7 +240,7 @@ class BookingController extends Controller
     {
         $user_id = Auth::user()->id;
 
-        if (Auth::user()->role == "booking-operator") {
+        if (Auth::user()->role == "booking operator") {
             $user_id = Auth::user()->user_id;
         }
 

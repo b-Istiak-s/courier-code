@@ -29,7 +29,7 @@ class StoreController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $storeAdmins = User::where('role', '=', 'store-admin')->where('status', '=', 1)->get(['id', 'name']);
+        $storeAdmins = User::where('role', '=', 'store admin')->where('status', '=', 1)->get(['id', 'name']);
         return view('admin.store.index', compact('stores', 'id', 'storeAdmins'));
     }
 

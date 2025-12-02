@@ -21,7 +21,7 @@ class StoreAdminController extends Controller
                 });
             })
             ->where('user_id', '=', Auth::user()->id)
-            ->where('role', '=', 'store-admin')
+            ->where('role', '=', 'store admin')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -34,11 +34,11 @@ class StoreAdminController extends Controller
     {
         // ✅ Step 1: Validate incoming request
         $validatedData = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'phone'    => 'nullable|string|max:20',
-            'address'  => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
         ]);
 
         // ✅ Step 3: Create the booking operator
@@ -49,8 +49,11 @@ class StoreAdminController extends Controller
         $operator->password = bcrypt($validatedData['password']);
         $operator->phone = $validatedData['phone'] ?? null;
         $operator->address = $validatedData['address'] ?? null;
-        $operator->role = 'store-admin';
+        $operator->role = 'store admin';
         $operator->save();
+
+        // Add role to model_has_roles table automatically
+        $operator->assignRole('store admin');
 
         // ✅ Step 4: Return response
         return redirect()->back()->with('success', 'Booking operator created successfully!');

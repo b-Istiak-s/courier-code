@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('11111111'),
             'phone' => '01922222222',
             'address' => 'Sylhet, Bangladesh',
-            'role' => 'booking-operator',
+            'role' => 'booking operator',
             'user_id' => 2, // belongs to Merchant One
             'status' => 1,
         ]);

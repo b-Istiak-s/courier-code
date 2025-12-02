@@ -19,7 +19,7 @@ class StoreManageController extends Controller
         // Apply role-based store filtering
         if ($user->role === 'merchant' || $user->role === 'admin') {
             $query->where('merchant_id', $user->id)->where('status', '=', 1);
-        } elseif ($user->role === 'store-admin') {
+        } elseif ($user->role === 'store admin') {
             $query->where('store_admin_id', $user->id)->where('status', '=', 1);
         } else {
             // If other roles have no access → return empty paginator
