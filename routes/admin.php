@@ -187,7 +187,7 @@ Route::middleware(['auth'])->group(function () {
     ## Assign Courier Services
     Route::get('admin/assign/courier/services/page', [AssignCourierController::class, 'index'])->name('admin.assign.courier.services.page');
     Route::post('admin/assign/courier/services', [AssignCourierController::class, 'order'])->name('admin.assign.courier.services');
-
+    Route::get('admin/assign/courier/services/invoice/{id}/page', [AssignCourierController::class, 'invoice'])->name('admin.assign.courier.services.invoice.page');
 
     ## Product Type
     Route::get('admin/product/type/index', [ProductTypeController::class, 'index'])->name('admin.product.type.index');
@@ -298,7 +298,6 @@ Route::controller(RoleController::class)->group(function () {
     Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
     Route::post('/update/permission', 'UpdatePermission')->name('update.permission');
     Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission');
-
 });
 
 // Roles All Route 
@@ -319,5 +318,4 @@ Route::controller(RoleController::class)->group(function () {
     Route::get('/admin/edit/roles/{id}', 'AdminRolesEdit')->name('admin.edit.roles');
     Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
     Route::get('/admin/delete/roles/{id}', 'AdminRolesDelete')->name('admin.delete.roles');
-
 });

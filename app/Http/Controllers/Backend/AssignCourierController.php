@@ -131,4 +131,11 @@ class AssignCourierController extends Controller
             return back()->with('error', 'Pathao API error: ' . $e->getMessage());
         }
     }
+
+    public function invoice($pathao_consignment_id)
+    {
+        $data = PathaoCourier::VIEW_ORDER($pathao_consignment_id);
+        $order = $data['data'];
+        return view('admin.courier-services.invoice', compact('order'));
+    }
 }

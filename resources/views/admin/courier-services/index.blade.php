@@ -164,17 +164,13 @@
                                                         $booking->pathao_consignment_ids,
                                                     );
 
-                                                    dd($value);
+                                                    // dd($value);
 
-
-                                                    $value1 = Enan\PathaoCourier\Facades\PathaoCourier::GET_PRICE_CALCULATION(
-                                                        $booking->pathao_consignment_ids,
-                                                    );
+                                                    // $value1 = Enan\PathaoCourier\Facades\PathaoCourier::GET_PRICE_CALCULATION(
+                                                    //     $booking->pathao_consignment_ids,
+                                                    // );
 
                                                     // dd($value1);
-
-
-                                                    
                                                 }
                                             @endphp
                                             @if (!empty($booking->pathao_consignment_ids))
@@ -182,6 +178,8 @@
                                                     {{ $value['data']['order_status'] ?? null }}
                                                 </div>
                                                 </br>
+                                                <a class="btn btn-sm btn-warning"
+                                                    href="{{ route('admin.assign.courier.services.invoice.page', $booking->pathao_consignment_ids) }}">Invoice</a>
                                             @endif
                                         </td>
 
