@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2025 at 02:08 PM
+-- Generation Time: Dec 05, 2025 at 06:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -2484,7 +2484,8 @@ INSERT INTO `bookings` (`id`, `order_id`, `merchant_id`, `booking_operator_id`, 
 (159, 'ORD_6929b692e7b8e', 1, 1, 1, '2', '48', 'Faisal', '01312361494', NULL, 'House 6 - 2nd road', '200', '', 2, NULL, 79, NULL, NULL, NULL, 'DR281125CU68ZY', 'pending', 'pathao', '1', '2025-11-28 08:49:54', '2025-11-28 08:49:58'),
 (160, 'ORD_6929b692ee86a', 1, 1, 1, '2', '48', 'Fahad', '01312361494', NULL, 'House 6 - 2nd road', '200', '', 2, NULL, 79, NULL, NULL, NULL, 'DR281125TM55XS', 'pending', 'pathao', '1', '2025-11-28 08:49:54', '2025-11-28 08:49:58'),
 (161, 'ORD_6929b692f12c1', 1, 1, 1, '2', '48', 'Fahim', '01312361494', NULL, 'House 6 - 2nd road', '200', '', 2, NULL, 79, NULL, NULL, NULL, 'DR281125K4JFAF', 'pending', 'pathao', '1', '2025-11-28 08:49:54', '2025-11-28 08:49:58'),
-(162, 'ORD_6929b69300192', 1, 1, 1, '2', '48', 'Farjana', '01312361494', NULL, 'House 6 - 2nd road', '200', '', 2, NULL, 79, NULL, NULL, NULL, 'DR281125LVPZSH', 'pending', 'pathao', '1', '2025-11-28 08:49:55', '2025-11-28 08:49:58');
+(162, 'ORD_6929b69300192', 1, 1, 1, '2', '48', 'Farjana', '01312361494', NULL, 'House 6 - 2nd road', '200', '', 2, NULL, 79, NULL, NULL, NULL, 'DR281125LVPZSH', 'pending', 'pathao', '1', '2025-11-28 08:49:55', '2025-11-28 08:49:58'),
+(163, '202512050513467LGD8B', 11, 11, 4, '2', '48', 'Farjana', '01516173275', '01516173275', 'NUR ALI SAWDAGAR BARI, BATHUA, WARD NO-04, POST OFFICE- NURALI BARI', '2000', '2000', 2, NULL, 405, NULL, 15872, NULL, 'DR051225E99YFQ', 'pending', 'pathao', '0', '2025-12-04 23:13:46', '2025-12-04 23:14:05');
 
 -- --------------------------------------------------------
 
@@ -2515,7 +2516,8 @@ INSERT INTO `booking_products` (`id`, `booking_id`, `product_id`, `weight`, `qua
 (117, 160, 1, 12.00, 3, NULL, NULL, '2025-11-28 08:49:54', '2025-11-28 08:49:54'),
 (118, 161, 3, 0.50, 1, NULL, NULL, '2025-11-28 08:49:54', '2025-11-28 08:49:54'),
 (119, 161, 2, 10.00, 1, NULL, NULL, '2025-11-28 08:49:54', '2025-11-28 08:49:54'),
-(120, 162, 3, 0.50, 2, NULL, NULL, '2025-11-28 08:49:55', '2025-11-28 08:49:55');
+(120, 162, 3, 0.50, 2, NULL, NULL, '2025-11-28 08:49:55', '2025-11-28 08:49:55'),
+(121, 163, 4, 0.50, 1, NULL, NULL, '2025-12-04 23:13:46', '2025-12-04 23:13:46');
 
 -- --------------------------------------------------------
 
@@ -2843,7 +2845,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2025_11_19_123306_add_pathao_store_id_to_stores_table', 3),
 (24, '2025_11_21_180442_create_cities_table', 3),
 (25, '2025_11_21_180445_create_zones_table', 3),
-(26, '2025_11_21_180454_create_areas_table', 3);
+(26, '2025_11_21_180454_create_areas_table', 3),
+(27, '2025_12_04_182924_create_setup_charges_table', 4);
 
 -- --------------------------------------------------------
 
@@ -2868,6 +2871,28 @@ CREATE TABLE `model_has_roles` (
   `model_type` varchar(255) NOT NULL,
   `model_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(3, 'App\\Models\\User', 10),
+(3, 'App\\Models\\User', 11),
+(3, 'App\\Models\\User', 12),
+(3, 'App\\Models\\User', 18),
+(3, 'App\\Models\\User', 19),
+(5, 'App\\Models\\User', 13),
+(9, 'App\\Models\\User', 14),
+(9, 'App\\Models\\User', 22),
+(9, 'App\\Models\\User', 23),
+(10, 'App\\Models\\User', 15),
+(10, 'App\\Models\\User', 16),
+(10, 'App\\Models\\User', 17),
+(10, 'App\\Models\\User', 20),
+(10, 'App\\Models\\User', 21),
+(11, 'App\\Models\\User', 3),
+(11, 'App\\Models\\User', 4);
 
 -- --------------------------------------------------------
 
@@ -2934,10 +2959,33 @@ CREATE TABLE `payment_details` (
 CREATE TABLE `permissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
+  `group_name` varchar(225) DEFAULT NULL,
   `guard_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `group_name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(9, 'booking.menu', 'booking', 'web', '2025-12-04 20:41:36', '2025-12-04 20:41:36'),
+(10, 'booking.operator.create', 'booking', 'web', '2025-12-04 20:42:29', '2025-12-04 20:42:29'),
+(11, 'order.create', 'booking', 'web', '2025-12-04 20:42:54', '2025-12-04 20:42:54'),
+(12, 'store.menu', 'store', 'web', '2025-12-04 20:43:20', '2025-12-04 20:43:20'),
+(13, 'store.create', 'store', 'web', '2025-12-04 20:43:39', '2025-12-04 20:43:39'),
+(14, 'store.admin.create', 'store', 'web', '2025-12-04 20:44:08', '2025-12-04 20:44:08'),
+(15, 'hub.menu', 'hub', 'web', '2025-12-04 20:44:35', '2025-12-04 20:44:35'),
+(16, 'hub.create', 'hub', 'web', '2025-12-04 20:44:56', '2025-12-04 20:44:56'),
+(17, 'hub.incharge.create', 'hub', 'web', '2025-12-04 20:45:21', '2025-12-04 20:45:21'),
+(18, 'store.incharge.create', 'hub', 'web', '2025-12-04 20:45:37', '2025-12-04 20:45:37'),
+(19, 'dispatch.incharge.create', 'hub', 'web', '2025-12-04 20:45:59', '2025-12-04 20:45:59'),
+(20, 'setting.menu', 'setting', 'web', '2025-12-04 20:46:19', '2025-12-04 20:46:19'),
+(21, 'role.menu', 'role', 'web', '2025-12-04 20:46:37', '2025-12-04 20:46:37'),
+(22, 'product.menu', 'product', 'web', '2025-12-04 20:48:44', '2025-12-04 20:48:44'),
+(23, 'merchant.manage', 'merchant', 'web', '2025-12-04 21:31:54', '2025-12-04 21:31:54'),
+(24, 'admin.create', 'setting', 'web', '2025-12-04 21:32:16', '2025-12-04 21:32:16');
 
 -- --------------------------------------------------------
 
@@ -2966,7 +3014,9 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `user_id`, `name`, `sku`, `category`, `weight`, `dimensions`, `stock`, `image`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Parcel', 'SKU_250408043751', 'Pharmaceutical', '12', '12x12x12', '6', NULL, '2025-11-16 05:29:07', '2025-11-28 08:49:55'),
 (2, 1, 'Prosalic Scalp Lotion', 'SKU_250408043237', 'Pharmaceutical', '10', '12x12x12', '8', NULL, '2025-11-16 05:29:23', '2025-11-28 08:49:55'),
-(3, 1, 'Black T-Shirt', 'SKU_2504080437522', 'T-shirt', '0.5', '12x12x12', '6', NULL, '2025-11-24 11:44:04', '2025-11-28 08:49:55');
+(3, 1, 'Black T-Shirt', 'SKU_2504080437522', 'T-shirt', '0.5', '12x12x12', '6', NULL, '2025-11-24 11:44:04', '2025-11-28 08:49:55'),
+(4, 11, 'Book', 'SKU_250408043751', 'Book', '0.5', '12x12x12', '9', 'uploads/products/20251205_042349_LTXY8551.JPG', '2025-12-04 22:23:49', '2025-12-04 23:45:05'),
+(5, 11, 'T-Shirt', 'SKU_250408043237', 'T-shirt', '0.5', '12x12x12', '6', 'uploads/products/20251205_042527_WhatsApp Image 2025-11-24 at 2.27.19 PM.jpeg', '2025-12-04 22:25:27', '2025-12-04 22:37:21');
 
 -- --------------------------------------------------------
 
@@ -3005,6 +3055,20 @@ CREATE TABLE `roles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(3, 'Admin', 'web', '2025-12-01 04:39:16', '2025-12-01 04:39:16'),
+(5, 'Merchant', 'web', '2025-12-01 05:40:29', '2025-12-01 05:40:29'),
+(6, 'Hub Incharge', 'web', '2025-12-04 12:14:46', '2025-12-04 12:14:46'),
+(7, 'Store Incharge', 'web', '2025-12-04 12:15:00', '2025-12-04 12:15:00'),
+(8, 'Dispatch Incharge', 'web', '2025-12-04 12:15:19', '2025-12-04 12:15:19'),
+(9, 'Store Admin', 'web', '2025-12-04 12:15:32', '2025-12-04 12:15:32'),
+(10, 'Booking Operator', 'web', '2025-12-04 12:15:49', '2025-12-04 12:15:49'),
+(11, 'Merchant Fullfillment', 'web', '2025-12-04 13:01:38', '2025-12-04 13:01:38');
+
 -- --------------------------------------------------------
 
 --
@@ -3015,6 +3079,59 @@ CREATE TABLE `role_has_permissions` (
   `permission_id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `role_has_permissions`
+--
+
+INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(9, 3),
+(9, 5),
+(9, 6),
+(9, 10),
+(9, 11),
+(10, 3),
+(10, 5),
+(10, 6),
+(10, 10),
+(10, 11),
+(11, 3),
+(11, 5),
+(11, 6),
+(11, 10),
+(11, 11),
+(12, 3),
+(12, 5),
+(12, 6),
+(12, 9),
+(12, 11),
+(13, 3),
+(13, 5),
+(13, 6),
+(13, 11),
+(14, 3),
+(14, 5),
+(14, 6),
+(14, 11),
+(15, 3),
+(15, 6),
+(16, 3),
+(16, 6),
+(17, 3),
+(17, 6),
+(18, 3),
+(18, 6),
+(19, 3),
+(19, 6),
+(20, 3),
+(21, 3),
+(22, 3),
+(22, 5),
+(22, 6),
+(22, 9),
+(22, 11),
+(23, 3),
+(24, 3);
 
 -- --------------------------------------------------------
 
@@ -3036,8 +3153,31 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('DfdPdWTY9msbidswCYJk6sBKUuS6kuYwRAAWzjEE', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTTNib0pNR0dxSFlmZmZtcmFXMkZCTGVMSmQ4ZmgzUElJSVRmd2tqVyI7czoxODoiZmxhc2hlcjo6ZW52ZWxvcGVzIjthOjA6e31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo1NjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL2Fzc2lnbi9jb3VyaWVyL3NlcnZpY2VzL3BhZ2UiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1764341422),
-('xnxR6yJO6M1c3HUKvVECwiErujEpHYCSbUbYxdzM', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiaWhoSXFhdUhONDJnVEpLaXZ2UjBrS3VSWDZ5VDNVZ2FwRWV1S1lrTyI7czoxODoiZmxhc2hlcjo6ZW52ZWxvcGVzIjthOjA6e31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo1NjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL2Fzc2lnbi9jb3VyaWVyL3NlcnZpY2VzL3BhZ2UiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1764393917);
+('DvQyQtSrm10HXdhy8bjSJo7VOudfNKG55BVMCPgo', 11, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiV2VLZkNCalFIQTZlNjBBOWVub2ZsajBYeVRzY2pweXpzUmFqcGR5SyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxODoiZmxhc2hlcjo6ZW52ZWxvcGVzIjthOjA6e31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo0MDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL2Jvb2tpbmcvcGFnZSI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExO30=', 1764913556),
+('s0DBIgXCTsXlSls51KsxQ9y5GsLS23Cb8JgXUaMR', 23, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZlZoY3A3VzBYQmRFNWowMWdsaDI3NjN3eGVXM1FFcVM3RkMwSTVsdCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxODoiZmxhc2hlcjo6ZW52ZWxvcGVzIjthOjA6e31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo0OToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL3N0b2NrL21vdmVtZW50L3BhZ2UvNCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjIzO30=', 1764913505);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setup_charges`
+--
+
+CREATE TABLE `setup_charges` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `fulfilment_fee` decimal(8,2) DEFAULT NULL,
+  `product_charges` decimal(8,2) DEFAULT NULL,
+  `delivery_charges` decimal(8,2) DEFAULT NULL,
+  `cod_fee` decimal(8,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setup_charges`
+--
+
+INSERT INTO `setup_charges` (`id`, `fulfilment_fee`, `product_charges`, `delivery_charges`, `cod_fee`, `created_at`, `updated_at`) VALUES
+(1, 1000.00, 150.00, 100.00, 80.00, '2025-12-04 12:59:51', '2025-12-04 13:00:48');
 
 -- --------------------------------------------------------
 
@@ -3067,7 +3207,11 @@ INSERT INTO `stock_movements` (`id`, `store_id`, `product_id`, `type`, `qty`, `n
 (4, 3, 2, 'in', 1, NULL, '2025-11-27 01:07:41', '2025-11-27 01:07:41'),
 (5, 1, 3, 'out', 1, NULL, '2025-11-27 06:39:20', '2025-11-27 06:39:20'),
 (6, 1, 2, 'out', 1, NULL, '2025-11-27 06:39:49', '2025-11-27 06:39:49'),
-(7, 1, 3, 'out', 1, NULL, '2025-11-27 06:40:17', '2025-11-27 06:40:17');
+(7, 1, 3, 'out', 1, NULL, '2025-11-27 06:40:17', '2025-11-27 06:40:17'),
+(8, 4, 4, 'in', 10, NULL, '2025-12-04 22:37:01', '2025-12-04 22:37:01'),
+(9, 4, 5, 'in', 6, NULL, '2025-12-04 22:37:21', '2025-12-04 22:37:21'),
+(10, 4, 4, 'out', 1, NULL, '2025-12-04 22:37:41', '2025-12-04 22:37:41'),
+(11, 4, 4, 'in', 1, NULL, '2025-12-04 23:45:05', '2025-12-04 23:45:05');
 
 -- --------------------------------------------------------
 
@@ -3102,7 +3246,8 @@ CREATE TABLE `stores` (
 INSERT INTO `stores` (`id`, `merchant_id`, `store_admin_id`, `pathao_store_id`, `name`, `owner_name`, `email`, `owner_phone`, `primary_phone`, `address`, `logo`, `city`, `zone`, `area`, `status`, `created_at`, `updated_at`) VALUES
 (1, '1', '6', NULL, 'Kaftech', NULL, 'faisaltez@gmail.com', NULL, '01516173275', 'House No - 06, Road No - 01', 'uploads/store/1763274294_69196e366c561.png', '2', '69', '5435', 1, '2025-11-16 00:24:54', '2025-11-27 00:02:21'),
 (2, '1', '6', NULL, 'Taabir', NULL, 'faisaltez@gmail.com', NULL, '01516173275', 'House No - 06, Road No - 01', NULL, '2', '405', '16306', 1, '2025-11-26 23:49:45', '2025-11-27 00:02:27'),
-(3, '1', '6', NULL, 'Time Shelter', NULL, 'faisal@gmail.com', NULL, '01516173275', 'House No - 06, Road No - 01', NULL, '2', '405', '5413', 1, '2025-11-27 00:00:02', '2025-11-27 04:54:02');
+(3, '1', '6', NULL, 'Time Shelter', NULL, 'faisal@gmail.com', NULL, '01516173275', 'House No - 06, Road No - 01', NULL, '2', '405', '5413', 1, '2025-11-27 00:00:02', '2025-11-27 04:54:02'),
+(4, '11', '23', NULL, 'Taabir By Jasmine', NULL, 'taabir@gmail.com', NULL, '01516173275', 'House No - 06, Road No - 01', NULL, '2', '405', '15870', 1, '2025-12-04 22:28:28', '2025-12-04 23:41:24');
 
 -- --------------------------------------------------------
 
@@ -3152,13 +3297,19 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `address`, `image`, `nid`, `role`, `user_id`, `hub_id`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin User', 'admin@gmail.com', NULL, '$2y$12$mQB6I3hRjJE/e0WztMde.u2e5F.DwAcMtSIN1cDTCQmRfaiVBFgJi', '01700000000', 'Dhaka, Bangladesh', NULL, NULL, 'admin', NULL, NULL, 1, NULL, '2025-11-16 00:20:15', '2025-11-16 00:20:15'),
 (2, 'Merchant One', 'merchant1@gmail.com', NULL, '$2y$12$u4mJrnXKhPPZT4vAmL.Tx.qzRg87szdym6bdG/ShxpjFdRZxjRN8C', '01811111111', 'Chittagong, Bangladesh', NULL, NULL, 'merchant', NULL, NULL, 1, NULL, '2025-11-16 00:20:16', '2025-11-16 00:20:16'),
-(3, 'Merchant Two', 'merchant2@gmail.com', NULL, '$2y$12$NZrkLLVGEQjzEaFjh1c.5.TmgDcZ091FxpkbmXBeSEn6XUZ3qoWUS', '01811111111', 'Chittagong, Bangladesh', NULL, NULL, 'merchant', NULL, NULL, 0, NULL, '2025-11-16 00:20:16', '2025-11-16 00:20:16'),
-(4, 'Merchant Three', 'merchant3@gmail.com', NULL, '$2y$12$Rnx1BrnfrrSPBByL2cgsB.hlpXfIGAIVyQLyECH983JMP0ekd0Bu.', '01811111111', 'Chittagong, Bangladesh', NULL, NULL, 'merchant', NULL, NULL, 0, NULL, '2025-11-16 00:20:16', '2025-11-16 00:20:16'),
+(3, 'Merchant Two', 'merchant2@gmail.com', NULL, '$2y$12$NZrkLLVGEQjzEaFjh1c.5.TmgDcZ091FxpkbmXBeSEn6XUZ3qoWUS', '01811111111', 'Chittagong, Bangladesh', NULL, NULL, 'Merchant Fullfillment', NULL, NULL, 1, NULL, '2025-11-16 00:20:16', '2025-12-04 13:36:27'),
+(4, 'Merchant Three', 'merchant3@gmail.com', NULL, '$2y$12$Rnx1BrnfrrSPBByL2cgsB.hlpXfIGAIVyQLyECH983JMP0ekd0Bu.', '01811111111', 'Chittagong, Bangladesh', NULL, NULL, 'Merchant Fullfillment', NULL, NULL, 1, NULL, '2025-11-16 00:20:16', '2025-12-04 13:43:41'),
 (5, 'Booking Operator', 'operator@gmail.com', NULL, '$2y$12$PrD0qfRRFGpHTuZ7rndv8.H2wnBDeMU1mO/HJX9JPShY9GmmBBaFW', '01922222222', 'Sylhet, Bangladesh', NULL, NULL, 'booking-operator', 2, NULL, 1, NULL, '2025-11-16 00:20:16', '2025-11-16 00:20:16'),
 (6, 'Kaiser Uddin', 'kaiser@gmail.com', NULL, '$2y$12$7cV16JhaWhdihdyZ1bEGReVCQ0QOFGI4koqUYaVVMgmPRU/8ZFcU.', '01838906073', 'House No - 06, Road No - 01', NULL, NULL, 'store-admin', 1, NULL, 1, NULL, '2025-11-24 04:12:55', '2025-11-24 04:13:22'),
 (7, 'Jasmine Akther', 'faisaltez1@gmail.com', NULL, '$2y$12$DtSbpLyzuwwnUT/uujlcK.UAMGPQFpmZP.Ta/ZKba59ii4PnzJoQe', '01516173275', 'Muradpur', NULL, NULL, 'booking-operator', 1, NULL, 1, NULL, '2025-11-25 03:27:06', '2025-11-25 03:35:21'),
 (8, 'Faisal Salam', 'faisaltez2@gmail.com', NULL, '$2y$12$/hPXfE.cqCdzGzAovAXW6.QlkgUuJY4kzTfSSRbUtXoEoiW36B5w.', '0172765653', 'Jalan Perbandaran SS 7', NULL, NULL, 'booking-operator', 1, NULL, 1, NULL, '2025-11-25 03:27:17', '2025-11-25 03:35:18'),
-(9, 'Minhaj', 'minhaj@gmail.com', NULL, '$2y$12$oRlmReH2KkwlL4arRb0CSuCfnTq5OOhflrYhjTGeLvfexpUpmqYce', '01312361495', 'House No - 06, Road No - 01', NULL, NULL, 'store-admin', 1, NULL, 1, NULL, '2025-11-27 00:04:19', '2025-11-27 00:12:06');
+(9, 'Minhaj', 'minhaj@gmail.com', NULL, '$2y$12$oRlmReH2KkwlL4arRb0CSuCfnTq5OOhflrYhjTGeLvfexpUpmqYce', '01312361495', 'House No - 06, Road No - 01', NULL, NULL, 'store-admin', 1, NULL, 1, NULL, '2025-11-27 00:04:19', '2025-11-27 00:12:06'),
+(11, 'Packer Panda', 'admin@app.com', NULL, '$2y$12$r6fNuC6fap5ChKup6GEiDetLBpnLE1HWAHxhnxXrAw7kcGarSnTMG', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, 1, NULL, '2025-12-04 21:18:08', '2025-12-04 21:18:08'),
+(12, 'jon', 'jon@gmail.com', NULL, '$2y$12$4zH1jyVNSxGrEggh9OIkX.mxsGA7YkEM6LfwuU6/Q1BPYxDx5M25G', NULL, NULL, NULL, NULL, 'Admin', NULL, NULL, 1, NULL, '2025-12-04 21:22:18', '2025-12-04 21:22:18'),
+(13, 'New Merchant', 'newm@gmail.com', NULL, '$2y$12$KXO6brjUL4I6H6jVfFZ/QeBgOYsRRMCBfav/VvEl/1onmZ3AUj9dq', NULL, NULL, NULL, NULL, 'Merchant', NULL, NULL, 1, NULL, '2025-12-04 21:29:34', '2025-12-04 22:10:46'),
+(14, 'Habib', 'habib@gmail.com', NULL, '$2y$12$UjRIsqo2o11WWCkdvUZZhOU5ZocJd0r5.N1ss.JnCywcTDnMQ9hqO', '01312361494', 'Jalan Perbandaran SS 7', NULL, NULL, 'store admin', 11, NULL, 1, NULL, '2025-12-04 22:30:57', '2025-12-04 22:31:02'),
+(21, 'Booking Man', 'bops@gmail.com', NULL, '$2y$12$uqLeTiWl3jPBlqYeSBOavu/BLUhFKKHuyMjRJoGENEx.TxFY4/z42', '01516173275', 'Muradpur', NULL, NULL, 'Booking Operator', 11, NULL, 1, NULL, '2025-12-04 23:05:39', '2025-12-04 23:05:45'),
+(23, 'Jasmine Akther', 'jalil@gmail.com', NULL, '$2y$12$VnyiZrFfBczLftn3y5huMOnsHdmmyIVBuniurdpGTNrzERrguFv3e', '01516173275', 'Muradpur', NULL, NULL, 'Store Admin', 11, NULL, 1, NULL, '2025-12-04 23:37:14', '2025-12-04 23:37:18');
 
 -- --------------------------------------------------------
 
@@ -4102,6 +4253,12 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
+-- Indexes for table `setup_charges`
+--
+ALTER TABLE `setup_charges`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `stock_movements`
 --
 ALTER TABLE `stock_movements`
@@ -4153,13 +4310,13 @@ ALTER TABLE `areas`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT for table `booking_products`
 --
 ALTER TABLE `booking_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -4225,7 +4382,7 @@ ALTER TABLE `kycs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `pathao-courier`
@@ -4243,13 +4400,13 @@ ALTER TABLE `payment_details`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `product_types`
@@ -4261,19 +4418,25 @@ ALTER TABLE `product_types`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `setup_charges`
+--
+ALTER TABLE `setup_charges`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `stock_movements`
 --
 ALTER TABLE `stock_movements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `thanas`
@@ -4285,7 +4448,7 @@ ALTER TABLE `thanas`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `zones`
