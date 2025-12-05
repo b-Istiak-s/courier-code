@@ -59,7 +59,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Status</th>
-                                <th>Store</th>
+                                <th>Fullfillment</th>
                                 <th>Registered At</th>
                             </tr>
                         </thead>
@@ -74,7 +74,7 @@
                                             <i class="text-danger fa-solid fa-circle-xmark"></i>
                                         @endif
                                     </td>
-                                    <td>{{ $merchant->name }}</td>
+                                    <td>{{ $merchant->name }} {{ $merchant->role }}</td>
                                     <td>{{ $merchant->email }}</td>
                                     <td>{{ $merchant->phone ?? '-' }}</td>
                                     <td>
@@ -96,12 +96,20 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.store.index', $merchant->id) }}"
-                                            class="btn btn-sm d-inline-flex align-items-center btn-warning">
-                                            <i
-                                                class="bx {{ $merchant->status ? 'bx-toggle-right' : 'bx-toggle-left' }} me-1"></i>
-                                            Create Store
-                                        </a>
+                                        <select class="form-select" name="fullfillment" id="fullfillment"
+                                            data-user-id="{{ $merchant->id }}">
+
+                                            <option value="yes"
+                                                {{ $merchant->role == 'Merchant Fullfillment' ? 'selected' : '' }}>
+                                                Yes
+                                            </option>
+
+                                            <option value="no"
+                                                {{ $merchant->role != 'Merchant Fullfillment' ? 'selected' : '' }}>
+                                                No
+                                            </option>
+
+                                        </select>
                                     </td>
                                     <td>{{ $merchant->created_at->format('d M, Y h:i A') }}</td>
                                 </tr>
@@ -178,6 +186,10 @@
         </div>
     </div>
 
+@endsection
+
+
+@section('script')
     <!-- ⚙️ JS to populate modal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -218,5 +230,30 @@
         });
     </script>
 
+    <script>
+        document.getElementById('fullfillment').addEventListener('change', function() {
+            let value = this.value;
+            let userId = this.getAttribute('data-user-id');
 
+            fetch("/admin/update-fullfillment-role", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        fullfillment: value,
+                        user_id: userId
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data.success);
+                    if (data.success == 1) {
+                        alert("Fullfillment Updated");
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+    </script>
 @endsection

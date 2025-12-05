@@ -4,8 +4,6 @@
 
 @section('content')
 
-
-
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -50,26 +48,15 @@
                                         <div class="form-group col-sm-9 text-secondary">
                                             <select name="group_name" class="form-select mb-3"
                                                 aria-label="Default select example">
-                                                <option selected="">Open this select Group</option>
-                                                <option value="brand">Brand</option>
-                                                <option value="category">Category</option>
-                                                <option value="subcategory">Subcategory</option>
-                                                <option value="product">Product</option>
-                                                <option value="slider">Slider</option>
-                                                <option value="ads">Ads</option>
-                                                <option value="coupon">Coupon</option>
-                                                <option value="area">Area</option>
-                                                <option value="vendor">Vendor</option>
-                                                <option value="order">Order</option>
-                                                <option value="return">Return</option>
-                                                <option value="report">Report</option>
-                                                <option value="user">User Management</option>
-                                                <option value="review">Review</option>
+                                                <option selected="">Select Section</option>
+                                                <option value="booking">Booking</option>
+                                                <option value="store">Store</option>
+                                                <option value="hub">Hub</option>
                                                 <option value="setting">Setting</option>
-                                                <option value="blog">Blog</option>
                                                 <option value="role">Role</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="stock">Stock</option>
+                                                <option value="merchant">Merchant</option>
+                                                <option value="assign-courier">Assign Courier</option>
+                                                <option value="product">Product</option>
                                             </select>
                                         </div>
                                     </div>
@@ -94,7 +81,7 @@
 
 @section('script')
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#myForm').validate({
                 rules: {
                     name: {
@@ -107,14 +94,14 @@
                     },
                 },
                 errorElement: 'span',
-                errorPlacement: function (error, element) {
+                errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
-                highlight: function (element, errorClass, validClass) {
+                highlight: function(element, errorClass, validClass) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function (element, errorClass, validClass) {
+                unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass('is-invalid');
                 },
             });

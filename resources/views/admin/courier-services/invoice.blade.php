@@ -94,6 +94,10 @@
                                     <td class="text-end">{{ $order['order_amount'] }} Tk</td>
                                 </tr>
                                 <tr>
+                                    <td>Full Fillment Fee</td>
+                                    <td class="text-end">{{ $order['delivery_fee'] }} Tk</td>
+                                </tr>
+                                <tr>
                                     <td>Delivery Fee</td>
                                     <td class="text-end">{{ $order['delivery_fee'] }} Tk</td>
                                 </tr>

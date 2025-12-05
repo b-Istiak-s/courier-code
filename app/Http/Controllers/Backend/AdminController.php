@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Auth;
-use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -192,5 +192,69 @@ class AdminController extends Controller
         $admin->save();
 
         return redirect()->back()->with('success', 'Admin status updated successfully.');
+    } ## End Mehtod
+
+
+    public function updateFullfillmentRole(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // If user selects 'yes', assign role 'fullfillment'
+        if ($request->fullfillment === 'yes') {
+            $user->assignRole('Merchant Fullfillment');
+            $user->role = "Merchant Fullfillment";
+        } else {
+            $user->removeRole('Merchant Fullfillment');
+            $user->assignRole('Merchant');
+            $user->role = "Merchant";
+        }
+
+        $user->save();
+
+        return response()->json(['success' => 1]);
+    }
+
+
+
+
+
+    public function createAdminePage()
+    {
+        return view('admin.admin_create_page');
+    } ## End Mehtod
+
+
+    ## Register New Member
+    public function createAdmin(Request $request)
+    {
+        // ✅ Step 1: Validate incoming request
+        $validatedData = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'phone'    => 'nullable|string|max:20',
+            'address'  => 'nullable|string',
+        ]);
+
+        // ✅ Step 3: Create the booking operator
+        $user = new User();
+        $user->name     = $validatedData['name'];
+        $user->email    = $validatedData['email'];
+        $user->password = bcrypt($validatedData['password']);
+        $user->phone    = $validatedData['phone'] ?? null;
+        $user->address  = $validatedData['address'] ?? null;
+        $user->role     = 'Admin';
+        $user->status   = 1;
+        $user->save();
+
+        // Add role to model_has_roles table automatically
+        $user->assignRole('Admin');
+
+        // ✅ Step 4: Return response
+        return redirect()->back()->with('success', 'Booking operator created successfully!');
     } ## End Mehtod
 }

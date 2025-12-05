@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\KYCController;
 use App\Http\Controllers\Backend\PathaoController;
 use App\Http\Controllers\Backend\PhoneVerifyController;
 use App\Http\Controllers\Backend\ProductTypeController;
+use App\Http\Controllers\Backend\SetupChargeController;
 use App\Http\Controllers\Backend\ThanaController;
 use Illuminate\Support\Facades\Route;
 
@@ -282,8 +283,6 @@ Route::get('admin/thana/status/toggle/{id}', [ThanaController::class, 'toggleSta
 // Route::get('admin/pathao/store/delete/{id}', [PathaoController::class, 'destroy'])->name('admin.pathao.store.delete');
 // Route::get('admin/pathao/store/status/toggle/{id}', [PathaoController::class, 'toggleStatus'])->name('admin.pathao.store.toggle.status');
 
-
-
 ## Bulk Upload
 Route::get('admin/bulk/upload/index', [BulkUploadController::class, 'index'])->name('admin.bulk.upload.index');
 Route::post('admin/bulk/upload/store', [BulkUploadController::class, 'store'])->name('admin.bulk.upload.store');
@@ -319,3 +318,16 @@ Route::controller(RoleController::class)->group(function () {
     Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
     Route::get('/admin/delete/roles/{id}', 'AdminRolesDelete')->name('admin.delete.roles');
 });
+
+
+
+
+## Setup Charge
+Route::get('admin/setup/charges/index', [SetupChargeController::class, 'index'])->name('admin.setup.charges.index');
+Route::post('admin/setup/charges/update', [SetupChargeController::class, 'update'])->name('admin.setup.charges.update');
+
+Route::post('/admin/update-fullfillment-role', [AdminController::class, 'updateFullfillmentRole'])
+    ->name('admin.update.fullfillment.role');
+
+Route::get('admin/create/page', [AdminController::class, 'createAdminePage'])->name('admin.create.page');
+Route::post('admin/create/store', [AdminController::class, 'createAdmin'])->name('admin.create.store');

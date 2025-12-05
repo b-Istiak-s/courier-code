@@ -23,6 +23,12 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
+        $user_id = Auth::user()->id;
+
+        if (Auth::user()->role == "Booking Operator") {
+            $user_id = Auth::user()->user_id;
+        }
+
         $store      = Store::where('merchant_id', '=', Auth::user()->id)->where('status', '=', 1)->first();
         $products   = Product::where('user_id', '=', Auth::user()->id)->get();
         $get_cities = PathaoCourier::GET_CITIES();
@@ -31,6 +37,7 @@ class BookingController extends Controller
         $bookingOrders = Booking::query()
             ->when($request->filled('search'), fn($q) =>
             $q->where('order_id', 'like', '%' . $request->search . '%'))
+            ->where('merchant_id', $user_id)
             ->latest()
             ->paginate(8)
             ->withQueryString();
@@ -45,7 +52,7 @@ class BookingController extends Controller
     {
         $user_id = Auth::user()->id;
 
-        if (Auth::user()->role == "booking operator") {
+        if (Auth::user()->role == "Booking Operator") {
             $user_id = Auth::user()->user_id;
         }
 
@@ -240,7 +247,7 @@ class BookingController extends Controller
     {
         $user_id = Auth::user()->id;
 
-        if (Auth::user()->role == "booking operator") {
+        if (Auth::user()->role == "Booking Operator") {
             $user_id = Auth::user()->user_id;
         }
 

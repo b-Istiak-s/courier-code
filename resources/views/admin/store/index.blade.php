@@ -149,10 +149,10 @@
                                             {{ $store->status ? 'Active' : 'Inactive' }}
                                         </a>
 
-                                        <a href="{{ route('admin.store.edit', $store->id) }}"
+                                        {{-- <a href="{{ route('admin.store.edit', $store->id) }}"
                                             class="btn btn-sm d-inline-flex align-items-center btn-warning">
                                             <i class="bx bx-edit"></i>
-                                        </a>
+                                        </a> --}}
                                     </td>
                                 </tr>
                             @endforeach

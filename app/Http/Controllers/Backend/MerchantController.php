@@ -38,13 +38,14 @@ class MerchantController extends Controller
                         ->orWhere('users.phone', 'like', "%{$search}%");
                 });
             })
-            ->where('users.role', '=', 'merchant')
+            ->whereIn('users.role', ['merchant', 'Merchant Fullfillment'])
             ->select(
                 'users.id',
                 'users.name',
                 'users.email',
                 'users.phone',
                 'users.status',
+                'users.role',
                 'users.created_at',
                 'kycs.status as kyc_status'
             )

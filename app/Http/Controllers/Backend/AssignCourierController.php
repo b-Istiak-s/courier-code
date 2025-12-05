@@ -13,6 +13,12 @@ class AssignCourierController extends Controller
 {
     public function index(Request $request)
     {
+        $user_id = Auth::user()->id;
+
+        if (Auth::user()->role == "Booking Operator") {
+            $user_id = Auth::user()->user_id;
+        }
+
         $bookings = Booking::with([
             'store',
             'merchant',
@@ -21,7 +27,7 @@ class AssignCourierController extends Controller
             'deliveryType',
             'products.product'   // nested eager loading
         ])
-            ->where('merchant_id', Auth::id())
+            ->where('merchant_id', $user_id)
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->where('bookings.order_id', 'like', '%' . $request->search . '%');
             })

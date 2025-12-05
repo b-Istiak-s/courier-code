@@ -53,14 +53,22 @@
                         </a>
                     </li>
 
+
                     <li>
                         <div class="dropdown-divider mb-0"></div>
                     </li>
 
-                    @if (Auth()->user()->role == 'admin')
+                    @if (Auth::user()->can('merchant.manage'))
                         <li>
                             <a class="dropdown-item" href="{{ route('admin.register.merchant.page') }}">
                                 <i class="bx bx-user"></i><span>Manage Merchant</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (Auth::user()->can('admin.create'))
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.create.page') }}">
+                                <i class="bx bx-user"></i><span>Create Admin</span>
                             </a>
                         </li>
                     @endif
@@ -87,7 +95,7 @@
                         </a>
                     </li> --}}
 
-                    @if (Auth()->user()->role == 'admin')
+                    @if (Auth()->user()->role == 'Admin')
                         {{-- <li>
                             <a class="dropdown-item" href="{{ route('admin.shop.index') }}">
                                 <i class="bx bx-user"></i><span>Create Store</span>
@@ -111,7 +119,7 @@
                         </li> --}}
                     @endif
 
-                    @if (Auth()->user()->role == 'admin' || Auth()->user()->role == 'owner')
+                    @if (Auth()->user()->role == 'Admin' || Auth()->user()->role == 'owner')
                         {{-- <li>
                             <a class="dropdown-item" href="{{ route('admin.register.page') }}">
                                 <i class="bx bx-user"></i><span>Register New Member</span>
