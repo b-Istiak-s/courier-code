@@ -12,20 +12,19 @@ class DispatchInchargeController extends Controller
 {
     public function index(Request $request)
     {
-        $dispatchIncharges = User::query()
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $search = $request->search;
-                $q->where(function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%")
-                        ->orWhere('phone', 'like', "%{$search}%");
-                });
-            })
-            ->where('user_id', '=', Auth::user()->id)
-            ->where('role', '=', 'dispatch-incharge')
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
+        $dispatchIncharges = [];
+
+        if (Auth::user()->role == "Admin") {
+            $dispatchIncharges = User::where('user_id', '=', Auth::user()->id)->where('role', '=', 'Dispatch Incharge')->paginate(10);
+        }
+
+        if (Auth::user()->role == "Hub Incharge") {
+            $dispatchIncharges = User::where('user_id', '=', Auth::user()->user_id)->where('role', '=', 'Dispatch Incharge')->paginate(10);
+        }
+
+        if (Auth::user()->role == "Dispatch Incharge") {
+            $dispatchIncharges = User::where('user_id', '=', Auth::user()->user_id)->where('role', '=', 'Dispatch Incharge')->paginate(10);
+        }
 
         return view('admin.dispatch-incharge.index', compact('dispatchIncharges'));
     } ## End Mehtod
@@ -35,7 +34,7 @@ class DispatchInchargeController extends Controller
      */
     public function create()
     {
-        $hubLists = Hub::where('merchant_id', '=', Auth::user()->id)->get();
+        $hubLists = Hub::get();
         return view('admin.dispatch-incharge.create', compact('hubLists'));
     }
 
@@ -60,9 +59,12 @@ class DispatchInchargeController extends Controller
         $operator->password = bcrypt($validatedData['password']);
         $operator->phone    = $validatedData['phone'] ?? null;
         $operator->address  = $validatedData['address'] ?? null;
-        $operator->role     = 'dispatch-incharge';
+        $operator->role     = 'Dispatch Incharge';
         $operator->hub_id   = $validatedData['hub_id'];
         $operator->save();
+
+        // Add role to model_has_roles table automatically
+        $operator->assignRole('Dispatch Incharge');
 
         // ✅ Step 4: Return response
         return redirect()->back()->with('success', 'Dispatch Incharge created successfully!');

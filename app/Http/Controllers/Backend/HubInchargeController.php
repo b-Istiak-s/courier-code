@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hub;
-use App\Models\HubIncharge;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +12,12 @@ class HubInchargeController extends Controller
 {
     public function index(Request $request)
     {
+        $user_id = Auth::user()->id;
+
+        if (Auth::user()->role == "Hub Incharge") {
+            $user_id = Auth::user()->user_id;
+        }
+
         $hubIncharges = User::query()
             ->when($request->filled('search'), function ($q) use ($request) {
                 $search = $request->search;
@@ -22,8 +27,8 @@ class HubInchargeController extends Controller
                         ->orWhere('phone', 'like', "%{$search}%");
                 });
             })
-            ->where('user_id', '=', Auth::user()->id)
-            ->where('role', '=', 'hub inchage')
+            ->where('user_id', '=', $user_id)
+            ->where('role', '=', 'Hub Incharge')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -35,31 +40,31 @@ class HubInchargeController extends Controller
     {
         // ✅ Step 1: Validate incoming request
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'hub_id' => 'required|string',
+            'phone'    => 'nullable|string|max:20',
+            'address'  => 'nullable|string',
+            'hub_id'   => 'required|string',
         ]);
 
         // ✅ Step 3: Create the Hub Incharge
         $operator = new User();
-        $operator->user_id = Auth::user()->id;
-        $operator->name = $validatedData['name'];
-        $operator->email = $validatedData['email'];
+        $operator->user_id  = Auth::user()->id;
+        $operator->name     = $validatedData['name'];
+        $operator->email    = $validatedData['email'];
         $operator->password = bcrypt($validatedData['password']);
-        $operator->phone = $validatedData['phone'] ?? null;
-        $operator->address = $validatedData['address'] ?? null;
-        $operator->role = 'hub inchage';
-        $operator->hub_id = $validatedData['hub_id'];
+        $operator->phone    = $validatedData['phone'] ?? null;
+        $operator->address  = $validatedData['address'] ?? null;
+        $operator->role     = 'Hub Incharge';
+        $operator->hub_id   = $validatedData['hub_id'];
         $operator->save();
 
         // Add role to model_has_roles table automatically
-        $operator->assignRole('hub inchage');
+        $operator->assignRole('Hub Incharge');
 
         // ✅ Step 4: Return response
-        return redirect()->back()->with('success', 'Store Incharge created successfully!');
+        return redirect()->back()->with('success', 'Hun Incharge created successfully!');
     }
 
     /**
@@ -77,7 +82,7 @@ class HubInchargeController extends Controller
     public function edit($id)
     {
         $hubIncharge = User::findOrFail($id);
-        $hubLists = Hub::where('merchant_id', '=', Auth::user()->id)->get();
+        $hubLists    = Hub::where('merchant_id', '=', Auth::user()->id)->get();
 
         return view('admin.hub-incharge.edit', compact('hubIncharge', 'hubLists'));
     }
@@ -88,16 +93,16 @@ class HubInchargeController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
+            'name'    => 'required|string|max:255',
+            'phone'   => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'hub_id' => 'required|string|max:255',
+            'hub_id'  => 'required|string|max:255',
         ]);
 
         $hubIncharge = User::findOrFail($id);
-        $hubIncharge->name = $validated['name'];
-        $hubIncharge->phone = $validated['phone'];
-        $hubIncharge->hub_id = $validated['hub_id'];
+        $hubIncharge->name    = $validated['name'];
+        $hubIncharge->phone   = $validated['phone'];
+        $hubIncharge->hub_id  = $validated['hub_id'];
         $hubIncharge->address = $validated['address'];
 
         $hubIncharge->save();

@@ -87,7 +87,9 @@
                     {{-- Pagination --}}
                     <div class="col-lg-12">
                         <div class="mt-3">
-                            {{ $dispatchIncharges->links('pagination::bootstrap-5') }}
+                            @if (!empty($dispatchIncharges))
+                                {{ $dispatchIncharges->links('pagination::bootstrap-5') }}
+                            @endif
                         </div>
                     </div>
                 </div>
