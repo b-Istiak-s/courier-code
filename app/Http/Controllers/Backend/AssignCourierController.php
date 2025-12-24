@@ -181,4 +181,47 @@ class AssignCourierController extends Controller
 
         return view('admin.courier-services.invoice', compact('order', 'setup_change', 'role'));
     }
+
+    public function pod($consignmentId)
+    {
+        $booking = Booking::where('pathao_consignment_ids', $consignmentId)->first();
+        if (!$booking) {
+            return back()->with('error', 'Booking not found for Consignment ID: ' . $consignmentId);
+        }
+        // have to update the user_id based on your application logic
+        $pathaoStore = CourierStore::where('user_id', '1')->first();
+        if (!$pathaoStore) {
+            return back()->with('error', 'Pathao Store not found for User ID: ' . $booking->booking_operator_id);
+        }
+        $token = $pathaoStore->token;
+
+        $url = "https://merchant.pathao.com/api/v1/orders/{$consignmentId}/pod";
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => "Bearer {$token}",
+                'Accept' => 'application/pdf',
+            ])->timeout(30)->get($url);
+
+            if ($response->successful()) {
+                $contentType = $response->header('Content-Type', 'application/pdf') ? 'application/pdf' : $response->header('Content-Type', 'application/octet-stream');
+                $filename = "pod_{$consignmentId}.pdf";
+
+                return response($response->body(), 200)
+                    ->header('Content-Type', $contentType)
+                    ->header('Content-Disposition', "inline; filename=\"{$filename}\"");
+            }
+
+            Log::error('POD download failed', [
+                'consignment' => $consignmentId,
+                'status' => $response->status(),
+                'body' => substr($response->body(), 0, 1000),
+            ]);
+
+            return back()->with('error', 'Failed to download POD. See logs.');
+        } catch (\Exception $e) {
+            Log::error('POD Download Error: ' . $e->getMessage(), ['consignment' => $consignmentId]);
+            return back()->with('error', 'Error downloading POD: ' . $e->getMessage());
+        }
+    }
 }

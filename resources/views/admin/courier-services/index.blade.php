@@ -54,6 +54,7 @@
                                     <th>Consignment ID</th>
                                     <th>Status</th>
                                     <th>Invoice</th>
+                                    <th>POD</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,7 +188,12 @@
                                                     href="{{ route('admin.assign.courier.services.invoice.page', $booking->pathao_consignment_ids) }}">Invoice</a>
                                             @endif
                                         </td>
-
+                                        <td>
+                                            @if (!empty($booking->pathao_consignment_ids))
+                                                <a class="btn btn-sm btn-success d-flex align-item-center"
+                                                    href="{{ route('admin.assign.courier.services.pod.page', $booking->pathao_consignment_ids) }}">POD</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
 

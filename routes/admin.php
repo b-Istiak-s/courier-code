@@ -215,6 +215,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/assign/courier/services/page', [AssignCourierController::class, 'index'])->name('admin.assign.courier.services.page');
     Route::post('admin/assign/courier/services', [AssignCourierController::class, 'order'])->name('admin.assign.courier.services');
     Route::get('admin/assign/courier/services/invoice/{id}/page', [AssignCourierController::class, 'invoice'])->name('admin.assign.courier.services.invoice.page');
+    Route::get('admin/assign/courier/services/pod/{id}/page', [AssignCourierController::class, 'pod'])->name('admin.assign.courier.services.pod.page');
 
     ## Product Type
     Route::get('admin/product/type/index', [ProductTypeController::class, 'index'])->name('admin.product.type.index');
@@ -314,7 +315,7 @@ Route::get('admin/bulk/upload/index', [BulkUploadController::class, 'index'])->n
 Route::post('admin/bulk/upload/store', [BulkUploadController::class, 'store'])->name('admin.bulk.upload.store');
 
 
-// Permission All Route 
+// Permission All Route
 Route::controller(RoleController::class)->group(function () {
 
     Route::get('/all/permission', 'AllPermission')->name('all.permission');
@@ -325,7 +326,7 @@ Route::controller(RoleController::class)->group(function () {
     Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission');
 });
 
-// Roles All Route 
+// Roles All Route
 Route::controller(RoleController::class)->group(function () {
 
     Route::get('/all/roles', 'AllRoles')->name('all.roles');
@@ -335,7 +336,7 @@ Route::controller(RoleController::class)->group(function () {
     Route::post('/update/roles', 'UpdateRoles')->name('update.roles');
     Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');
 
-    // add role permission 
+    // add role permission
 
     Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission');
     Route::post('/role/permission/store', 'RolePermissionStore')->name('role.permission.store');
