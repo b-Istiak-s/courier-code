@@ -165,19 +165,20 @@
 
                                         <td>
                                             {{ $booking->pathao_consignment_ids }}
-                                            @php
+                                            {{-- @php
                                                 if (!empty($booking->pathao_consignment_ids)) {
                                                     # code...
                                                     $value = Enan\PathaoCourier\Facades\PathaoCourier::VIEW_ORDER(
                                                         $booking->pathao_consignment_ids,
                                                     );
                                                 }
-                                            @endphp
+                                            @endphp --}}
                                         </td>
                                         <td>
                                             @if (!empty($booking->pathao_consignment_ids))
                                                 <div class="bg-danger p-2 rounded text-white" role="alert">
-                                                    {{ $value['data']['order_status'] ?? null }}
+                                                    {{-- {{ $value['data']['order_status'] ?? null }} --}}
+                                                    {{ $booking->courier_status ?? null }}
                                                 </div>
                                             @endif
                                         </td>
