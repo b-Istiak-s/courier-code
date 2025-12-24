@@ -182,13 +182,13 @@
 
                                     <div class="col-lg-12">
                                         <label class="form-label fw-semibold">Recipient Address</label>
-                                        <textarea class="form-control" rows="3" name="recipient_address" required>{{ old('recipient_address') }}</textarea>
+                                        <textarea class="form-control" rows="3" name="recipient_address" placeholder="Address, area, city" required>{{ old('recipient_address') }}</textarea>
                                     </div>
                                 </div>
                             </div>
 
                             {{-- LOCATION SELECTION --}}
-                            <div class="mt-4">
+                            {{-- <div class="mt-4">
                                 <h5 class="fw-bold text-secondary mb-3">Location</h5>
 
                                 <div class="row g-3">
@@ -218,7 +218,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="mt-4 text-end">
                                 <button type="submit" class="btn btn-success px-4">
@@ -238,7 +238,7 @@
 @endsection
 
 @section('script')
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOMContentLoaded fired - initializing location selects');
 
@@ -347,7 +347,7 @@
                 citySelect.dispatchEvent(new Event('change'));
             }
         });
-    </script>
+    </script> --}}
 
     <script>
         function checkCharacter(params) {
@@ -438,7 +438,7 @@
         document.getElementById("recipient_address").addEventListener("input", function() {
             let addr = this.value.toLowerCase();
             console.log("this is working!!");
-            
+
 
             // === City Auto Select ===
             if (addr.includes("chittagong") || addr.includes("muradpur")) {

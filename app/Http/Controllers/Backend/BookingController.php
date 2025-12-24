@@ -92,9 +92,9 @@ class BookingController extends Controller
             'recipient_address' => 'required|string|min:10|max:255',
             'amount_to_collect' => 'required|string',
             'item_description'  => 'nullable',
-            'city_id'           => 'required|integer',
-            'zone_id'           => 'required|integer',
-            'area_id'           => 'required|integer',
+            // 'city_id'           => 'required|integer',
+            // 'zone_id'           => 'required|integer',
+            // 'area_id'           => 'required|integer',
             'products'          => 'required',  // product list JSON
         ]);
 
@@ -130,9 +130,9 @@ class BookingController extends Controller
                 'recipient_phone'     => $validatedData['recipient_phone'],
                 'recipient_secondary_phone' => $validatedData['recipient_secondary_phone'] ?? null,
                 'recipient_address'   => $validatedData['recipient_address'],
-                'city_id'             => $validatedData['city_id'],
-                'zone_id'             => $validatedData['zone_id'],
-                'area_id'             => $validatedData['area_id'],
+                // 'city_id'             => $validatedData['city_id'],
+                // 'zone_id'             => $validatedData['zone_id'],
+                // 'area_id'             => $validatedData['area_id'],
                 'amount_to_collect'   => $validatedData["amount_to_collect"],
                 'item_description'    => $validatedData["item_description"],
             ]);
