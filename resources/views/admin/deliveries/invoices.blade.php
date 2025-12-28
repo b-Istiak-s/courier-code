@@ -136,6 +136,7 @@
                                     <th>Status</th>
                                     <th>Invoice</th>
                                     <th>POD</th>
+                                    <th>PDF</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -168,6 +169,12 @@
                                             @if (!empty($booking->pathao_consignment_ids))
                                                 <a class="btn btn-sm btn-success d-flex align-item-center" target="_blank"
                                                     href="{{ route('admin.assign.courier.services.pod.page', $booking->pathao_consignment_ids) }}">POD</a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (!empty($booking->pathao_consignment_ids))
+                                                <a class="btn btn-sm btn-success d-flex align-item-center" target="_blank"
+                                                    href="{{ route('admin.invoice.pdf', $booking->order_id) }}">PDF</a>
                                             @endif
                                         </td>
                                     </tr>

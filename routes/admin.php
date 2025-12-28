@@ -402,6 +402,7 @@ Route::get('admin/delivered/page', [DeliveriesController::class, 'delivered'])->
 Route::get('admin/returned/page', [DeliveriesController::class, 'returned'])->name('admin.returned.page');
 Route::get('admin/cancelled/page', [DeliveriesController::class, 'cancelled'])->name('admin.cancelled.page');
 Route::get('admin/invoice/page', [DeliveriesController::class, 'invoice'])->name('admin.invoice.page');
+Route::get('admin/invoice/pdf/{orderId}', [DeliveriesController::class, 'invoicePdf'])->name('admin.invoice.pdf');
 
 // Route::get('admin/active/create', [DispatchItemController::class, 'create'])->name('admin.dispatch.item.create');
 // Route::get('admin/active/edit/{id}', [DispatchItemController::class, 'edit'])->name('admin.dispatch.item.edit');
