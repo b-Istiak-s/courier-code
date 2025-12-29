@@ -10,18 +10,18 @@
         body {
             font-family: Arial, sans-serif;
             font-size: 7px;
-            width: 2.5in;
-            height: 2.5in;
+            width: 2.75in;
+            height: 2.75in;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            /* overflow: hidden; */
         }
         .label {
             border: 1px solid #000;
             padding: 3px;
             width: 100%;
-            max-height: 3in;
-            overflow: hidden;
+            /* max-height: 3in; */
+            /* overflow: hidden; */
         }
         .merchant-logo {
             width: 26px;
