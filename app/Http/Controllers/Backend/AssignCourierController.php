@@ -24,6 +24,8 @@ class AssignCourierController extends Controller
             $user_id = Auth::user()->user_id;
         }
 
+        $courierStores = CourierStore::get();
+
         if (Auth::user()->role == "Admin") {
             $bookings = Booking::with([
                 'store',
@@ -40,8 +42,6 @@ class AssignCourierController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(8)
                 ->withQueryString();
-
-            $courierStores = CourierStore::get();
 
             return view('admin.courier-services.index', compact('bookings', 'courierStores'));
         } else {
@@ -61,8 +61,6 @@ class AssignCourierController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(8)
                 ->withQueryString();
-
-            $courierStores = CourierStore::get();
 
             return view('admin.courier-services.index', compact('bookings', 'courierStores'));
         }
@@ -154,6 +152,7 @@ class AssignCourierController extends Controller
 
                 $data = PathaoCourier::VIEW_ORDER($consignmentId);
                 $order = $data['data'];
+                
                 Invoice::updateOrCreate(
                     [
                         'order_id' => $order['order_id'], // unique key

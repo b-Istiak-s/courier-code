@@ -59,7 +59,7 @@ class BookingController extends Controller
         // ✅ Load data for dropdowns
         $stores = Store::select('id', 'name')->where('merchant_id', '=', $user_id)->orderBy('name')->get();
         $products = Product::select('id', 'name')->where('user_id', '=', $user_id)->orderBy('name')->get();
-
+        
 
         $productTypes = ProductType::where('status', '=', 1)->orderBy('name')->get();
         $deliveryTypes = DeliveryType::where('status', '=', 1)->orderBy('name')->get();
