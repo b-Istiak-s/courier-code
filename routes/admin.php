@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
 
     ## Merchant Registration
     Route::get('admin/register/merchant/page', [MerchantController::class, 'manageMerchant'])->name('admin.register.merchant.page');
+    Route::get('admin/register/merchant/fullfillment/page', [MerchantController::class, 'manageMerchantFullfillment'])->name('admin.register.merchant.fullfillment.page');
     Route::get('admin/status/merchant/toggle/{id}', [MerchantController::class, 'toggleStatus'])->name('admin.toggle.merchant.status');
 
     ## Store

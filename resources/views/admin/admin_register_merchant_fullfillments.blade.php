@@ -35,10 +35,10 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" href="{{ route('admin.register.merchant.page') }}">Merchant</a>
+            <a class="nav-link" href="{{ route('admin.register.merchant.page') }}">Merchant</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" href="{{ route('admin.register.merchant.fullfillment.page') }}">Fullfillment</a>
+            <a class="nav-link active" href="{{ route('admin.register.merchant.fullfillment.page') }}">Fullfillment</a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="card-body table-responsive">
                         {{-- Search --}}
-                        <form method="GET" action="{{ route('admin.register.merchant.page') }}" class="mb-4">
+                        <form method="GET" action="{{ route('admin.register.merchant.fullfillment.page') }}" class="mb-4">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control"
                                     placeholder="Search by name, email or phone" value="{{ request('search') }}">
@@ -75,9 +75,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($merchants as $index => $merchant)
+                                @foreach ($merchant_fullfillments as $index => $merchant)
                                     <tr>
-                                        <td>{{ $merchants->firstItem() + $index }}</td>
+                                        <td>{{ $merchant_fullfillments->firstItem() + $index }}</td>
                                         <td>
                                             @if ($merchant->kyc_status)
                                                 <i class="text-primary fa-solid fa-circle-check"></i>
@@ -133,7 +133,7 @@
                         {{-- Pagination --}}
                         <div class="col-lg-12">
                             <div class="mt-3">
-                                {{ $merchants->links('pagination::bootstrap-5') }}
+                                {{ $merchant_fullfillments->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
                     </div>
